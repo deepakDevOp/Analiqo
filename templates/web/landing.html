@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}AI-Powered Repricing Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    AI-Powered Repricing for 
+                    <span class="text-warning">Amazon & Flipkart</span>
+                </h1>
+                <p class="lead mb-4">
+                    Maximize your profits with intelligent repricing strategies, 
+                    real-time market analysis, and conditional automation that 
+                    adapts to market changes.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                    <a href="{% url 'account_signup' %}" class="btn btn-warning btn-lg px-4">
+                        Start Free Trial
+                    </a>
+                    <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                        Learn More
+                    </a>
+                </div>
+                <div class="mt-4">
+                    <small class="text-light opacity-75">
+                        <i class="bi bi-check-circle me-2"></i>14-day free trial
+                        <span class="mx-2">•</span>
+                        <i class="bi bi-check-circle me-2"></i>No credit card required
+                        <span class="mx-2">•</span>
+                        <i class="bi bi-check-circle me-2"></i>Cancel anytime
+                    </small>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/hero-dashboard.png' %}" 
+                     alt="Dashboard Preview" 
+                     class="img-fluid rounded shadow-lg"
+                     style="max-height: 500px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Powerful Features</h2>
+            <p class="lead text-muted">Everything you need to dominate marketplace pricing</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-robot text-primary fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">AI-Powered Repricing</h5>
+                        <p class="text-muted">
+                            Advanced ML algorithms that learn from your data to optimize pricing strategies automatically.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-graph-up-arrow text-success fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Market Analysis</h5>
+                        <p class="text-muted">
+                            Real-time competitor tracking, demand forecasting, and market trend analysis.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-shield-check text-warning fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Safety Guardrails</h5>
+                        <p class="text-muted">
+                            Built-in protections ensure you never price below cost or violate your business rules.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-lightning text-info fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Real-Time Updates</h5>
+                        <p class="text-muted">
+                            Instant price updates across all marketplaces with real-time sync and monitoring.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-people text-danger fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Multi-User Teams</h5>
+                        <p class="text-muted">
+                            Collaborate with your team using role-based permissions and audit trails.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-secondary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-bar-chart text-secondary fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Advanced Analytics</h5>
+                        <p class="text-muted">
+                            Detailed reports and insights to track performance and optimize strategies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Simple, Transparent Pricing</h2>
+            <p class="lead text-muted">Choose the plan that fits your business</p>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <h5 class="fw-bold text-muted">Free</h5>
+                        <div class="display-6 fw-bold mb-3">$0</div>
+                        <p class="text-muted mb-4">Perfect for getting started</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Up to 100 products</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Basic repricing rules</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Email support</li>
+                            <li class="mb-2"><i class="bi bi-x text-muted me-2"></i>Advanced analytics</li>
+                            <li class="mb-2"><i class="bi bi-x text-muted me-2"></i>ML-based pricing</li>
+                        </ul>
+                        <a href="{% url 'account_signup' %}" class="btn btn-outline-primary w-100">
+                            Get Started Free
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-primary shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <small class="fw-bold">MOST POPULAR</small>
+                    </div>
+                    <div class="card-body text-center p-4">
+                        <h5 class="fw-bold text-primary">Pro</h5>
+                        <div class="display-6 fw-bold mb-3">$99<small class="fs-6 text-muted">/month</small></div>
+                        <p class="text-muted mb-4">For growing businesses</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Up to 10,000 products</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Advanced repricing rules</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>ML-based pricing</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Advanced analytics</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Priority support</li>
+                        </ul>
+                        <a href="{% url 'account_signup' %}" class="btn btn-primary w-100">
+                            Start Free Trial
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <h5 class="fw-bold text-muted">Enterprise</h5>
+                        <div class="display-6 fw-bold mb-3">Custom</div>
+                        <p class="text-muted mb-4">For large organizations</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Unlimited products</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Custom integrations</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Dedicated support</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>SLA guarantee</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Custom features</li>
+                        </ul>
+                        <a href="{% url 'support' %}" class="btn btn-outline-primary w-100">
+                            Contact Sales
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Ready to Boost Your Profits?</h2>
+        <p class="lead mb-4">
+            Join thousands of sellers who have increased their revenue with our AI-powered repricing platform.
+        </p>
+        <a href="{% url 'account_signup' %}" class="btn btn-warning btn-lg px-5">
+            Start Your Free Trial Today
+        </a>
+        <div class="mt-4">
+            <small class="text-light opacity-75">
+                No setup fees • Cancel anytime • 14-day free trial
+            </small>
+        </div>
+    </div>
+</section>
+{% endblock %}

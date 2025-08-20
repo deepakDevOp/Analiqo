@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: repricing-platform
+  labels:
+    name: repricing-platform
+    app: repricing-platform
