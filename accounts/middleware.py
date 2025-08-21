@@ -19,7 +19,6 @@ class OrganizationMiddleware(MiddlewareMixin):
         # Skip organization context for certain paths
         skip_paths = [
             '/admin/',
-            '/accounts/',
             '/health/',
             '/metrics/',
             '/api/schema/',
@@ -27,8 +26,12 @@ class OrganizationMiddleware(MiddlewareMixin):
             '/media/',
         ]
         
+        # Only skip organization context for non-authentication paths
         if any(request.path.startswith(path) for path in skip_paths):
             return None
+        
+        # For authentication paths, we still want to set organization context
+        # but only after the user is authenticated
         
         # Get organization from session or user's primary organization
         if request.user.is_authenticated:
@@ -46,11 +49,12 @@ class OrganizationMiddleware(MiddlewareMixin):
                     # Clear invalid organization from session
                     request.session.pop('current_organization_id', None)
             
-            # Fallback to user's primary organization
+            # Fallback to user's first active organization if no primary is set
             if not request.organization:
-                primary_org = request.user.get_primary_organization()
-                if primary_org:
-                    request.organization = primary_org
-                    request.session['current_organization_id'] = str(primary_org.id)
+                first_membership = request.user.memberships.filter(is_active=True).first()
+                if first_membership:
+                    organization = first_membership.organization
+                    request.organization = organization
+                    request.session['current_organization_id'] = str(organization.id)
         
         return None

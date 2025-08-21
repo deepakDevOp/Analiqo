@@ -1,0 +1,81 @@
+{% load static %}
+
+<footer class="bg-dark text-light py-5 mt-auto">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <h5>
+                    <img src="{% static 'images/logo.svg' %}" alt="Repricing Platform" width="24" height="24" class="me-2">
+                    Repricing Platform
+                </h5>
+                <p class="text-muted">
+                    AI-powered repricing engine for Amazon and Flipkart sellers. 
+                    Optimize your prices with intelligent algorithms and market analysis.
+                </p>
+            </div>
+            
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Product</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-muted">Features</a></li>
+                    <li><a href="#" class="text-muted">Pricing</a></li>
+                    <li><a href="#" class="text-muted">API Docs</a></li>
+                    <li><a href="#" class="text-muted">Integrations</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Support</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'support' %}" class="text-muted">Help Center</a></li>
+                    <li><a href="#" class="text-muted">Documentation</a></li>
+                    <li><a href="#" class="text-muted">Contact Us</a></li>
+                    <li><a href="#" class="text-muted">Status</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Company</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-muted">About</a></li>
+                    <li><a href="#" class="text-muted">Blog</a></li>
+                    <li><a href="#" class="text-muted">Careers</a></li>
+                    <li><a href="#" class="text-muted">Partners</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Legal</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'privacy' %}" class="text-muted">Privacy Policy</a></li>
+                    <li><a href="{% url 'terms' %}" class="text-muted">Terms of Service</a></li>
+                    <li><a href="#" class="text-muted">Security</a></li>
+                    <li><a href="#" class="text-muted">GDPR</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <hr class="my-4 border-secondary">
+        
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <small class="text-muted">
+                    © {% now "Y" %} Repricing Platform. All rights reserved.
+                </small>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="d-flex justify-content-md-end gap-3">
+                    <a href="#" class="text-muted" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-muted" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="text-muted" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

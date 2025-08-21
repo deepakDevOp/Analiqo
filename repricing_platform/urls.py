@@ -37,8 +37,8 @@ urlpatterns = [
     # Monitoring
     path("metrics/", include("django_prometheus.urls")),
     
-    # API Documentation
-    path("api/schema/", include("drf_spectacular.urls")),
+    # API Documentation - temporarily commented out
+    # path("api/schema/", include("drf_spectacular.urls")),
     
     # Static pages
     path("privacy/", TemplateView.as_view(template_name="pages/privacy.html"), name="privacy"),
@@ -58,6 +58,6 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Error handlers
-handler404 = "web.views.errors.handler404"
-handler500 = "web.views.errors.handler500"
-handler403 = "web.views.errors.handler403"
+handler404 = "web.views.handler404"
+handler500 = "web.views.handler500"
+handler403 = "web.views.handler403"

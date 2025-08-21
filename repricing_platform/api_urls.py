@@ -15,11 +15,12 @@ urlpatterns = [
     
     # App API endpoints
     path("accounts/", include("accounts.api_urls")),
-    path("billing/", include("billing.api_urls")),
-    path("catalog/", include("catalog.api_urls")),
-    path("pricing/", include("pricing_rules.api_urls")),
-    path("ml/", include("pricing_ml.api_urls")),
-    path("repricing/", include("repricer.api_urls")),
-    path("analytics/", include("analytics.api_urls")),
-    path("integrations/", include("integrations.api_urls")),
+    # Temporarily commented out until app URL files are created
+    # path("billing/", include("billing.api_urls")),
+    # path("catalog/", include("catalog.api_urls")),
+    # path("pricing/", include("pricing_rules.api_urls")),
+    # path("ml/", include("pricing_ml.api_urls")),
+    # path("repricing/", include("repricer.api_urls")),
+    # path("analytics/", include("analytics.api_urls")),
+    # path("integrations/", include("integrations.api_urls")),
 ]

@@ -8,18 +8,19 @@ from . import views
 app_name = 'accounts'
 
 urlpatterns = [
-    # Profile management
-    path('profile/', views.ProfileView.as_view(), name='profile'),
-    path('settings/', views.SettingsView.as_view(), name='settings'),
+    # Onboarding
+    path('onboarding/', views.OnboardingView.as_view(), name='onboarding'),
     
     # Organization management
-    path('organization/', views.OrganizationView.as_view(), name='organization_settings'),
-    path('organization/members/', views.OrganizationMembersView.as_view(), name='organization_members'),
-    path('organization/invite/', views.InviteMemberView.as_view(), name='invite_member'),
-    path('organization/switch/<uuid:org_id>/', views.SwitchOrganizationView.as_view(), name='switch_organization'),
+    path('organizations/create/', views.OrganizationCreateView.as_view(), name='organization_create'),
+    path('organizations/switch/', views.OrganizationSwitchView.as_view(), name='organization_switch'),
+    path('organizations/settings/', views.organization_settings_view, name='organization_settings'),
     
-    # Invitation handling
+    # User profile
+    path('profile/', views.profile_view, name='profile'),
+    
+    # Invitations
     path('invitations/', views.InvitationListView.as_view(), name='invitation_list'),
-    path('invitations/<uuid:token>/accept/', views.AcceptInvitationView.as_view(), name='accept_invitation'),
-    path('invitations/<uuid:token>/decline/', views.DeclineInvitationView.as_view(), name='decline_invitation'),
+    path('invitations/create/', views.InvitationCreateView.as_view(), name='invitation_create'),
+    path('invitations/<str:token>/', views.InvitationAcceptView.as_view(), name='invitation_accept'),
 ]

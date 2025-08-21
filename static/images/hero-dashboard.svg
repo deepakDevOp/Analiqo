@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8f9fa" stroke="#e9ecef" stroke-width="2" rx="8"/>
+  
+  <!-- Header -->
+  <rect x="20" y="20" width="760" height="60" fill="#343a40" rx="4"/>
+  <text x="40" y="45" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Repricing Dashboard</text>
+  <circle cx="740" cy="50" r="15" fill="#28a745"/>
+  <text x="735" y="54" fill="white" font-family="Arial, sans-serif" font-size="10">✓</text>
+  
+  <!-- Sidebar -->
+  <rect x="20" y="100" width="200" height="480" fill="#e9ecef" rx="4"/>
+  <text x="30" y="125" fill="#495057" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Navigation</text>
+  <rect x="30" y="140" width="170" height="25" fill="#007bff" rx="3"/>
+  <text x="35" y="155" fill="white" font-family="Arial, sans-serif" font-size="11">Dashboard</text>
+  <rect x="30" y="175" width="170" height="25" fill="#6c757d" rx="3"/>
+  <text x="35" y="190" fill="white" font-family="Arial, sans-serif" font-size="11">Products</text>
+  <rect x="30" y="210" width="170" height="25" fill="#6c757d" rx="3"/>
+  <text x="35" y="225" fill="white" font-family="Arial, sans-serif" font-size="11">Pricing Rules</text>
+  <rect x="30" y="245" width="170" height="25" fill="#6c757d" rx="3"/>
+  <text x="35" y="260" fill="white" font-family="Arial, sans-serif" font-size="11">Analytics</text>
+  
+  <!-- Main Content Area -->
+  <rect x="240" y="100" width="540" height="480" fill="white" stroke="#e9ecef" stroke-width="1" rx="4"/>
+  
+  <!-- KPI Cards -->
+  <rect x="260" y="120" width="120" height="80" fill="#e3f2fd" stroke="#2196f3" stroke-width="1" rx="4"/>
+  <text x="270" y="140" fill="#1976d2" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Total Revenue</text>
+  <text x="270" y="160" fill="#1976d2" font-family="Arial, sans-serif" font-size="18" font-weight="bold">$45,231</text>
+  <text x="270" y="180" fill="#4caf50" font-family="Arial, sans-serif" font-size="10">↗ +12.5%</text>
+  
+  <rect x="400" y="120" width="120" height="80" fill="#e8f5e8" stroke="#4caf50" stroke-width="1" rx="4"/>
+  <text x="410" y="140" fill="#2e7d32" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Products</text>
+  <text x="410" y="160" fill="#2e7d32" font-family="Arial, sans-serif" font-size="18" font-weight="bold">1,247</text>
+  <text x="410" y="180" fill="#4caf50" font-family="Arial, sans-serif" font-size="10">↗ +8.2%</text>
+  
+  <rect x="540" y="120" width="120" height="80" fill="#fff3e0" stroke="#ff9800" stroke-width="1" rx="4"/>
+  <text x="550" y="140" fill="#e65100" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Margin</text>
+  <text x="550" y="160" fill="#e65100" font-family="Arial, sans-serif" font-size="18" font-weight="bold">23.4%</text>
+  <text x="550" y="180" fill="#f44336" font-family="Arial, sans-serif" font-size="10">↘ -2.1%</text>
+  
+  <!-- Chart Area -->
+  <rect x="260" y="220" width="500" height="200" fill="#fafafa" stroke="#e0e0e0" stroke-width="1" rx="4"/>
+  <text x="270" y="240" fill="#424242" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Price Performance Chart</text>
+  
+  <!-- Simple line chart representation -->
+  <polyline points="280,380 320,350 360,360 400,330 440,340 480,310 520,320 560,300 600,290 640,280 680,270 720,260" 
+            fill="none" stroke="#2196f3" stroke-width="3"/>
+  <polyline points="280,390 320,370 360,375 400,355 440,365 480,340 520,350 560,335 600,325 640,315 680,305 720,295" 
+            fill="none" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Legend -->
+  <rect x="580" y="250" width="170" height="40" fill="white" stroke="#e0e0e0" stroke-width="1" rx="2"/>
+  <line x1="590" y1="262" x2="610" y2="262" stroke="#2196f3" stroke-width="3"/>
+  <text x="615" y="266" fill="#424242" font-family="Arial, sans-serif" font-size="10">Current Price</text>
+  <line x1="590" y1="277" x2="610" y2="277" stroke="#4caf50" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="615" y="281" fill="#424242" font-family="Arial, sans-serif" font-size="10">Recommended</text>
+  
+  <!-- Recent Activity Section -->
+  <rect x="260" y="440" width="500" height="120" fill="white" stroke="#e9ecef" stroke-width="1" rx="4"/>
+  <text x="270" y="460" fill="#495057" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Recent Pricing Changes</text>
+  
+  <circle cx="280" cy="480" r="3" fill="#28a745"/>
+  <text x="290" y="484" fill="#495057" font-family="Arial, sans-serif" font-size="10">iPhone 13 Pro - Price updated to $899 (was $949)</text>
+  
+  <circle cx="280" cy="500" r="3" fill="#ffc107"/>
+  <text x="290" y="504" fill="#495057" font-family="Arial, sans-serif" font-size="10">Samsung Galaxy S22 - Pending approval for $799</text>
+  
+  <circle cx="280" cy="520" r="3" fill="#dc3545"/>
+  <text x="290" y="524" fill="#495057" font-family="Arial, sans-serif" font-size="10">MacBook Air - Price change failed (out of stock)</text>
+  
+  <circle cx="280" cy="540" r="3" fill="#28a745"/>
+  <text x="290" y="544" fill="#495057" font-family="Arial, sans-serif" font-size="10">AirPods Pro - Auto-priced to $229 (Buy Box won)</text>
+</svg>

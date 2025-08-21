@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Analytics Dashboard{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.metric-card {
+    transition: transform 0.2s ease-in-out;
+}
+.metric-card:hover {
+    transform: translateY(-2px);
+}
+.chart-container {
+    position: relative;
+    height: 300px;
+}
+.trend-up {
+    color: #16a34a;
+}
+.trend-down {
+    color: #dc2626;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-1">Analytics Dashboard</h1>
+                    <p class="text-muted">Monitor your pricing performance and market insights</p>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary" onclick="refreshDashboard()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="exportReport()">
+                        <i class="bi bi-download me-2"></i>Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview Metrics -->
+    <div class="row mb-4">
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card metric-card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-box text-primary fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-semibold text-muted small">Total Products</div>
+                            <div class="fs-4 fw-bold">{{ overview_metrics.total_products.current }}</div>
+                            <div class="small {% if overview_metrics.total_products.trend == 'up' %}trend-up{% else %}trend-down{% endif %}">
+                                {{ overview_metrics.total_products.change }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card metric-card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-check-circle text-success fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-semibold text-muted small">Active Listings</div>
+                            <div class="fs-4 fw-bold">{{ overview_metrics.active_listings.current }}</div>
+                            <div class="small {% if overview_metrics.active_listings.trend == 'up' %}trend-up{% else %}trend-down{% endif %}">
+                                {{ overview_metrics.active_listings.change }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card metric-card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-arrow-up-down text-warning fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-semibold text-muted small">Repricing Actions</div>
+                            <div class="fs-4 fw-bold">{{ overview_metrics.repricing_actions.current }}</div>
+                            <div class="small {% if overview_metrics.repricing_actions.trend == 'up' %}trend-up{% else %}trend-down{% endif %}">
+                                {{ overview_metrics.repricing_actions.change }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card metric-card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-trophy text-info fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-semibold text-muted small">Buy Box Rate</div>
+                            <div class="fs-4 fw-bold">{{ overview_metrics.buy_box_win_rate.current }}</div>
+                            <div class="small {% if overview_metrics.buy_box_win_rate.trend == 'up' %}trend-up{% else %}trend-down{% endif %}">
+                                {{ overview_metrics.buy_box_win_rate.change }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card metric-card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-secondary bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-percent text-secondary fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-semibold text-muted small">Avg Margin</div>
+                            <div class="fs-4 fw-bold">{{ overview_metrics.avg_margin.current }}</div>
+                            <div class="small {% if overview_metrics.avg_margin.trend == 'up' %}trend-up{% else %}trend-down{% endif %}">
+                                {{ overview_metrics.avg_margin.change }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6 mb-3">
+            <div class="card metric-card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-currency-dollar text-success fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-semibold text-muted small">Revenue Impact</div>
+                            <div class="fs-4 fw-bold">{{ overview_metrics.revenue_impact.current }}</div>
+                            <div class="small {% if overview_metrics.revenue_impact.trend == 'up' %}trend-up{% else %}trend-down{% endif %}">
+                                {{ overview_metrics.revenue_impact.change }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Revenue Trend</h5>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary active" onclick="loadChart('revenue_trend', '7d')">7D</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="loadChart('revenue_trend', '30d')">30D</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="loadChart('revenue_trend', '90d')">90D</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0">
+                    <h5 class="card-title mb-0">Buy Box Performance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="buyBoxChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Row -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0">
+                    <h5 class="card-title mb-0">Top Performing Products</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Revenue</th>
+                                    <th>Margin</th>
+                                    <th>Buy Box</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in top_products %}
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">{{ product.name }}</div>
+                                            <small class="text-muted">{{ product.sku }}</small>
+                                        </div>
+                                    </td>
+                                    <td class="fw-semibold">${{ product.revenue|floatformat:0 }}</td>
+                                    <td>
+                                        <span class="badge bg-success bg-opacity-10 text-success">{{ product.margin }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary">{{ product.buy_box_rate }}</span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ product.repricing_count }} changes</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0">
+                    <h5 class="card-title mb-0">Recent Activities</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {% for activity in recent_activities %}
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+                                    <i class="bi bi-arrow-up-down text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="fw-semibold">{{ activity.action }}</div>
+                                        <div class="text-muted small">{{ activity.product }}</div>
+                                        <div class="small">
+                                            ${{ activity.old_price }} → ${{ activity.new_price }}
+                                            <span class="text-muted">- {{ activity.reason }}</span>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">{{ activity.timestamp|timesince }} ago</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts -->
+    {% if alerts %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0">
+                    <h5 class="card-title mb-0">Analytics Alerts</h5>
+                </div>
+                <div class="card-body">
+                    {% for alert in alerts %}
+                    <div class="alert alert-{% if alert.type == 'warning' %}warning{% elif alert.type == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-{% if alert.type == 'warning' %}exclamation-triangle{% elif alert.type == 'success' %}check-circle{% else %}info-circle{% endif %} me-2"></i>
+                            <div class="flex-grow-1">
+                                <strong>{{ alert.title }}</strong>
+                                <div>{{ alert.message }}</div>
+                            </div>
+                            <small class="text-muted">{{ alert.timestamp|timesince }} ago</small>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Initialize charts
+let revenueChart, buyBoxChart;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCharts();
+});
+
+function initializeCharts() {
+    // Revenue Trend Chart
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    revenueChart = new Chart(revenueCtx, {
+        type: 'line',
+        data: {{ performance_charts.revenue_trend|safe }},
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Buy Box Performance Chart
+    const buyBoxCtx = document.getElementById('buyBoxChart').getContext('2d');
+    buyBoxChart = new Chart(buyBoxCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Won', 'Lost'],
+            datasets: [{
+                data: [68, 32],
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(239, 68, 68, 0.8)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+function loadChart(chartType, period) {
+    // Update active button
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Fetch new data and update chart
+    fetch(`/analytics/api/?chart=${chartType}&period=${period}`)
+        .then(response => response.json())
+        .then(data => {
+            if (chartType === 'revenue_trend') {
+                revenueChart.data = data;
+                revenueChart.update();
+            }
+        })
+        .catch(error => console.error('Error loading chart data:', error));
+}
+
+function refreshDashboard() {
+    location.reload();
+}
+
+function exportReport() {
+    // Implement export functionality
+    alert('Export functionality coming soon!');
+}
+</script>
+{% endblock %}

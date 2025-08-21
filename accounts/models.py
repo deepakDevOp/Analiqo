@@ -4,11 +4,38 @@ User and organization models for multi-tenant SaaS.
 
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
 from timezone_field import TimeZoneField
 from core.models import TimeStampedModel, UUIDModel
+
+
+class UserManager(BaseUserManager):
+    """Custom user manager for email-based authentication."""
+    
+    def create_user(self, email, password=None, **extra_fields):
+        """Create and return a regular user with email and password."""
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Create and return a superuser with email and password."""
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        
+        return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -39,6 +66,8 @@ class User(AbstractUser):
     ui_preferences = models.JSONField(default=dict, blank=True)
     
     username = None  # Remove username field
+    
+    objects = UserManager()
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -144,7 +173,7 @@ class Membership(UUIDModel, TimeStampedModel):
     is_primary = models.BooleanField(default=False)  # Primary org for user
     
     # Invitation details
-    invited_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_invitations')
+    invited_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='membership_invitations')
     invitation_accepted_at = models.DateTimeField(null=True, blank=True)
     
     # Access control

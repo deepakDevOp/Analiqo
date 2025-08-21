@@ -1,237 +1,550 @@
-{% extends "base.html" %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiqo | AI-Powered Repricing for Amazon & Flipkart</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-{% block title %}AI-Powered Repricing Platform{% endblock %}
+    <style>
+        /* Custom styles for the page */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #05071E; /* Dark blue background */
+            color: #E0E0E0; /* Light grey text */
+        }
 
-{% block content %}
-<!-- Hero Section -->
-<section class="hero bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center min-vh-100">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">
-                    AI-Powered Repricing for 
-                    <span class="text-warning">Amazon & Flipkart</span>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 50%, #020617 100%);
+        }
+
+        .hero-gradient-text {
+            background: linear-gradient(90deg, #38BDF8, #A78BFA, #F472B6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .animated-gradient-bg {
+            background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #14b8a6);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.5); /* Semi-transparent dark blue */
+            border: 1px solid #334155;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.05); /* Zoom effect */
+            border-color: #A78BFA;
+            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
+        }
+
+        .pricing-card {
+             background: #0F172A;
+             border: 1px solid #334155;
+        }
+
+        .btn-primary-glow {
+            background: #6D28D9; /* Violet */
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.7);
+        }
+
+        .btn-primary-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px 5px rgba(167, 139, 250, 0.3);
+        }
+
+        /* For the interactive "How it Works" section */
+        .step-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .step-item.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Header Hover Effect */
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link:hover {
+            transform: scale(1.1);
+            color: #A78BFA;
+        }
+
+        /* Features Dropdown */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(-20px) scale(0.95);
+            opacity: 0;
+        }
+        .modal-overlay.open .modal-content {
+             transform: translateY(0) scale(1);
+             opacity: 1;
+        }
+
+        /* Interactive Graphics Styles */
+        .graphic-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 256px;
+            background: #0F172A;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow: hidden;
+        }
+        /* AI Repricing Graphic */
+        .ai-graphic .bar-container { display: flex; align-items: flex-end; height: 150px; gap: 1rem; }
+        .ai-graphic .bar { width: 20px; background-color: #4f46e5; border-radius: 4px; animation: price-flux 2s ease-in-out infinite alternate; }
+        .ai-graphic .bar:nth-child(2) { animation-delay: 0.2s; background-color: #7c3aed; }
+        .ai-graphic .bar:nth-child(3) { animation-delay: 0.4s; background-color: #db2777; }
+        .ai-graphic .bar:nth-child(4) { animation-delay: 0.6s; background-color: #14b8a6; }
+        @keyframes price-flux { from { height: 20%; } to { height: 100%; } }
+        
+        /* Conditional Repricing Graphic */
+        .conditional-graphic { text-align: center; color: #9ca3af; }
+        .conditional-graphic .node { background: #1e293b; padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid #475569; margin-bottom: 1rem; }
+        .conditional-graphic .path { height: 30px; width: 1px; background: #475569; margin: 0 auto; }
+        .conditional-graphic .options { display: flex; justify-content: space-around; }
+        .conditional-graphic .option { background: #334155; padding: 0.5rem; border-radius: 0.5rem; }
+
+        /* Market Analysis Graphic */
+        .analysis-graphic .chart { position: relative; width: 100%; height: 150px; border-left: 2px solid #475569; border-bottom: 2px solid #475569; }
+        .analysis-graphic .line { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; fill: none; stroke: #38bdf8; stroke-width: 3; stroke-dasharray: 500; stroke-dashoffset: 500; animation: draw-line 2s ease-out forwards; }
+        @keyframes draw-line { to { stroke-dashoffset: 0; } }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="sticky top-0 left-0 right-0 z-20 py-4 bg-slate-900/50 backdrop-blur-lg border-b border-slate-800">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">analiqo</h1>
+            <nav class="hidden md:flex items-center">
+                <div class="relative dropdown">
+                    <button class="text-gray-300 hover:text-white px-3 py-2 flex items-center nav-link">
+                        Features <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    </button>
+                    <div class="dropdown-menu absolute hidden bg-slate-800 rounded-lg shadow-lg mt-2 py-2 w-48">
+                        <a href="#features" data-feature="ai-repricing" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">AI Repricing</a>
+                        <a href="#features" data-feature="conditional-repricing" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">Conditional Repricing</a>
+                        <a href="#features" data-feature="market-analysis" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">Market Analysis</a>
+                    </div>
+                </div>
+                <a href="#pricing" class="text-gray-300 hover:text-white px-3 py-2 nav-link">Pricing</a>
+                <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 nav-link">Contact</a>
+                <a href="/accounts/login/" class="bg-white text-slate-900 font-semibold rounded-lg px-4 py-2 ml-4 hover:bg-gray-200 transition-colors">Sign In</a>
+            </nav>
+            
+            <!-- Mobile menu button -->
+            <button class="md:hidden text-gray-300 hover:text-white" id="mobile-menu-button">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile menu (hidden by default) -->
+        <div class="hidden md:hidden bg-slate-900 border-b border-slate-800" id="mobile-menu">
+            <div class="container mx-auto px-6 py-4 space-y-2">
+                <a href="#features" class="block text-gray-300 hover:text-white py-2">Features</a>
+                <a href="#pricing" class="block text-gray-300 hover:text-white py-2">Pricing</a>
+                <a href="#contact" class="block text-gray-300 hover:text-white py-2">Contact</a>
+                <div class="flex flex-col space-y-2 pt-4 border-t border-slate-700">
+                    <a href="/accounts/login/" class="bg-slate-800 text-white font-semibold rounded-lg px-4 py-2 text-center hover:bg-slate-700 transition-colors">Sign In</a>
+                    <a href="/accounts/signup/" class="bg-white text-slate-900 font-semibold rounded-lg px-4 py-2 text-center hover:bg-gray-200 transition-colors">Sign Up Free</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="relative text-white text-center py-32 md:py-48 overflow-hidden">
+            <div class="absolute inset-0 bg-grid-slate-700/[0.05] bg-[bottom_1px_center] [mask-image:linear-gradient(to_bottom,transparent,white)]"></div>
+            <div class="absolute inset-0 animated-gradient-bg opacity-10"></div>
+            
+            <div class="container mx-auto px-6 relative">
+                <a href="#" class="inline-flex items-center justify-center bg-slate-800 border border-slate-700 text-sm font-medium rounded-full px-4 py-1 mb-6 hover:bg-slate-700 transition-colors">
+                    Now supporting Flipkart Marketplace!
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+                    The Future of E-commerce is <span class="hero-gradient-text">Autonomous</span>
                 </h1>
-                <p class="lead mb-4">
-                    Maximize your profits with intelligent repricing strategies, 
-                    real-time market analysis, and conditional automation that 
-                    adapts to market changes.
+                <p class="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto mb-8">
+                    Analiqo's AI engine works 24/7 to win the Buy Box, optimize profits, and eliminate manual price adjustments on Amazon & Flipkart.
                 </p>
-                <div class="d-flex flex-column flex-sm-row gap-3">
-                    <a href="{% url 'account_signup' %}" class="btn btn-warning btn-lg px-4">
-                        Start Free Trial
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <a href="/accounts/signup/" class="w-full sm:w-auto btn-primary-glow text-white font-semibold rounded-lg px-8 py-3 text-center">
+                        Start 14-Day Free Trial
                     </a>
-                    <a href="#features" class="btn btn-outline-light btn-lg px-4">
-                        Learn More
+                    <a href="#contact" class="w-full sm:w-auto bg-slate-800 border border-slate-700 text-white font-semibold rounded-lg px-8 py-3 text-center hover:bg-slate-700 transition-colors">
+                        Book a Demo
                     </a>
                 </div>
-                <div class="mt-4">
-                    <small class="text-light opacity-75">
-                        <i class="bi bi-check-circle me-2"></i>14-day free trial
-                        <span class="mx-2">•</span>
-                        <i class="bi bi-check-circle me-2"></i>No credit card required
-                        <span class="mx-2">•</span>
-                        <i class="bi bi-check-circle me-2"></i>Cancel anytime
-                    </small>
+                <p class="mt-4 text-sm text-slate-500">No credit card required.</p>
+            </div>
+        </section>
+
+        <!-- "How It Works" Interactive Section -->
+        <section id="how-it-works" class="py-20 sm:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Four Steps to Automated Growth</h2>
+                    <p class="text-lg text-slate-400 mt-2">Go from manual repricing to intelligent automation in minutes.</p>
+                </div>
+
+                <div class="relative">
+                     <!-- The connecting line -->
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-px bg-slate-700 -translate-y-1/2"></div>
+                    
+                    <div class="grid md:grid-cols-4 gap-12 relative">
+                        <div class="step-item text-center">
+                            <div class="relative inline-flex items-center justify-center w-16 h-16 bg-slate-800 border-2 border-slate-700 rounded-full mb-4 text-purple-400">
+                                <i data-lucide="link-2"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Connect Store</h3>
+                            <p class="text-slate-400">Securely link your Amazon and Flipkart accounts with a few clicks.</p>
+                        </div>
+                        <div class="step-item text-center">
+                             <div class="relative inline-flex items-center justify-center w-16 h-16 bg-slate-800 border-2 border-slate-700 rounded-full mb-4 text-pink-400">
+                                <i data-lucide="sliders-horizontal"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Define Strategy</h3>
+                            <p class="text-slate-400">Set your profit goals and choose from rule-based or ML-powered strategies.</p>
+                        </div>
+                        <div class="step-item text-center">
+                            <div class="relative inline-flex items-center justify-center w-16 h-16 bg-slate-800 border-2 border-slate-700 rounded-full mb-4 text-sky-400">
+                                <i data-lucide="brain-circuit"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">AI Takes Over</h3>
+                            <p class="text-slate-400">Our engine analyzes the market and reprices your listings in real-time.</p>
+                        </div>
+                        <div class="step-item text-center">
+                             <div class="relative inline-flex items-center justify-center w-16 h-16 bg-slate-800 border-2 border-slate-700 rounded-full mb-4 text-emerald-400">
+                                <i data-lucide="trending-up"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Watch Sales Grow</h3>
+                            <p class="text-slate-400">Monitor your growth with our analytics dashboard and gain market insights.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6 text-center">
-                <img src="{% static 'images/hero-dashboard.png' %}" 
-                     alt="Dashboard Preview" 
-                     class="img-fluid rounded shadow-lg"
-                     style="max-height: 500px;">
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<!-- Features Section -->
-<section id="features" class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">Powerful Features</h2>
-            <p class="lead text-muted">Everything you need to dominate marketplace pricing</p>
-        </div>
+        <!-- Features Section -->
+        <section id="features" class="py-20 sm:py-32 gradient-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">A Smarter Way to Compete</h2>
+                    <p class="text-lg text-slate-400 mt-2">Our features are designed for serious sellers.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="feature-card p-8 rounded-2xl" data-feature="ai-repricing">
+                        <div class="inline-block bg-purple-500/10 text-purple-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="brain-circuit"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">AI-Powered Repricing</h3>
+                        <p class="text-slate-400">Combines rule-based precision with machine learning foresight to predict market shifts and optimize pricing.</p>
+                    </div>
+                    <div class="feature-card p-8 rounded-2xl" data-feature="conditional-repricing">
+                         <div class="inline-block bg-pink-500/10 text-pink-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="git-branch"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Conditional Repricing</h3>
+                        <p class="text-slate-400">Automatically switch strategies based on market context like Buy Box ownership, stock levels, or competitor behavior.</p>
+                    </div>
+                    <div class="feature-card p-8 rounded-2xl" data-feature="market-analysis">
+                        <div class="inline-block bg-sky-500/10 text-sky-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="bar-chart-3"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Market Analysis Tools</h3>
+                        <p class="text-slate-400">Track competitor pricing, monitor category trends, and get actionable insights to stay ahead of the curve.</p>
+                    </div>
+                     <div class="feature-card p-8 rounded-2xl" data-feature="profit-protection">
+                        <div class="inline-block bg-emerald-500/10 text-emerald-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Profit Protection</h3>
+                        <p class="text-slate-400">Set intelligent floor and ceiling prices based on your costs to ensure you never sell at a loss and maximize profit.</p>
+                    </div>
+                    <div class="feature-card p-8 rounded-2xl" data-feature="multi-tenant">
+                        <div class="inline-block bg-yellow-500/10 text-yellow-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Multi-Tenant SaaS</h3>
+                        <p class="text-slate-400">Manage multiple brands or client accounts with robust organization management, user permissions, and billing.</p>
+                    </div>
+                    <div class="feature-card p-8 rounded-2xl" data-feature="integrations">
+                        <div class="inline-block bg-rose-500/10 text-rose-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="globe-2"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Marketplace Integrations</h3>
+                        <p class="text-slate-400">Natively built for Amazon (SP-API) and Flipkart Marketplace API for reliable, real-time data and performance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20 sm:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Pricing That Scales With You</h2>
+                    <p class="text-lg text-slate-400 mt-2">Start for free, then choose a plan that fits your growth.</p>
+                </div>
+                <div class="flex flex-col lg:flex-row justify-center items-center gap-8 max-w-4xl mx-auto">
+                    <!-- Pro Plan -->
+                    <div class="pricing-card w-full rounded-2xl p-8 transform hover:scale-[1.02] transition-transform duration-300">
+                        <h3 class="text-lg font-semibold text-purple-400">PRO</h3>
+                        <p class="text-4xl font-bold my-4">$99 <span class="text-lg font-medium text-slate-400">/ month</span></p>
+                        <p class="text-slate-400 mb-6">For established sellers looking to automate and optimize.</p>
+                        <ul class="space-y-4 text-slate-300 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Up to 10,000 products</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Advanced & ML repricing</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Multiple Marketplaces</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Priority email support</li>
+                        </ul>
+                        <a href="/accounts/signup/" class="w-full btn-primary-glow text-white font-semibold rounded-lg px-6 py-3 text-center block">Start Free Trial</a>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="pricing-card w-full rounded-2xl p-8 border-2 border-slate-700">
+                        <h3 class="text-lg font-semibold text-sky-400">ENTERPRISE</h3>
+                        <p class="text-4xl font-bold my-4">Custom</p>
+                        <p class="text-slate-400 mb-6">For large-scale operations and agencies with unique needs.</p>
+                        <ul class="space-y-4 text-slate-300 mb-8">
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Unlimited products</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Custom integrations & API access</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Dedicated account manager & SLA</li>
+                            <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Volume discounts</li>
+                        </ul>
+                        <a href="#contact" class="w-full bg-slate-800 border border-slate-700 text-white font-semibold rounded-lg px-6 py-3 text-center block hover:bg-slate-700 transition-colors">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="py-20 sm:py-32">
+            <div class="container mx-auto px-6 text-center">
+                 <div class="relative max-w-4xl mx-auto p-12 rounded-2xl overflow-hidden animated-gradient-bg">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-white">Ready to Automate Your Growth?</h2>
+                    <p class="text-lg text-white/80 mt-4 mb-8 max-w-xl mx-auto">Stop leaving money on the table. Join hundreds of sellers winning the Buy Box and increasing profits with Analiqo.</p>
+                    <a href="/accounts/signup/" class="bg-white text-slate-900 font-bold rounded-lg px-8 py-4 text-center hover:bg-gray-200 transition-transform hover:scale-105 inline-block">
+                        Sign Up Free
+                    </a>
+                 </div>
+            </div>
+        </section>
         
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
-                            <i class="bi bi-robot text-primary fs-3"></i>
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 sm:py-32 gradient-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Get In Touch</h2>
+                    <p class="text-lg text-slate-400 mt-2">Ready to transform your pricing strategy? Let's talk.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="text-center">
+                        <div class="inline-block bg-purple-500/10 text-purple-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="calendar"></i>
                         </div>
-                        <h5 class="fw-bold">AI-Powered Repricing</h5>
-                        <p class="text-muted">
-                            Advanced ML algorithms that learn from your data to optimize pricing strategies automatically.
-                        </p>
+                        <h3 class="text-xl font-semibold mb-2">Book a Demo</h3>
+                        <p class="text-slate-400 mb-4">See Analiqo in action with a personalized demo tailored to your business needs.</p>
+                        <a href="mailto:demo@analiqo.com?subject=Demo Request" class="bg-purple-600 text-white font-semibold rounded-lg px-6 py-2 hover:bg-purple-700 transition-colors inline-block">Schedule Demo</a>
+                    </div>
+                    <div class="text-center">
+                        <div class="inline-block bg-sky-500/10 text-sky-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="mail"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Sales Inquiry</h3>
+                        <p class="text-slate-400 mb-4">Have questions about pricing or need a custom solution? Our sales team is here to help.</p>
+                        <a href="mailto:sales@analiqo.com?subject=Sales Inquiry" class="bg-sky-600 text-white font-semibold rounded-lg px-6 py-2 hover:bg-sky-700 transition-colors inline-block">Contact Sales</a>
+                    </div>
+                    <div class="text-center md:col-span-2 lg:col-span-1">
+                        <div class="inline-block bg-emerald-500/10 text-emerald-400 p-3 rounded-lg mb-4">
+                            <i data-lucide="help-circle"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Support</h3>
+                        <p class="text-slate-400 mb-4">Need help getting started or have technical questions? We're here to support you.</p>
+                        <a href="mailto:support@analiqo.com?subject=Support Request" class="bg-emerald-600 text-white font-semibold rounded-lg px-6 py-2 hover:bg-emerald-700 transition-colors inline-block">Get Support</a>
                     </div>
                 </div>
             </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
-                            <i class="bi bi-graph-up-arrow text-success fs-3"></i>
-                        </div>
-                        <h5 class="fw-bold">Market Analysis</h5>
-                        <p class="text-muted">
-                            Real-time competitor tracking, demand forecasting, and market trend analysis.
-                        </p>
-                    </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="gradient-bg border-t border-slate-800">
+        <div class="container mx-auto px-6 py-8 text-center text-slate-400">
+            <p>&copy; 2024 Analiqo. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Feature Modal -->
+    <div id="featureModal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="modal-content w-full max-w-4xl bg-slate-900 border border-slate-700 rounded-2xl shadow-lg p-8 md:p-12 relative">
+            <button id="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 id="modalTitle" class="text-3xl font-bold hero-gradient-text mb-4">Feature Title</h3>
+                    <p id="modalDescription" class="text-slate-300 leading-relaxed">Detailed feature description goes here...</p>
                 </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
-                            <i class="bi bi-shield-check text-warning fs-3"></i>
-                        </div>
-                        <h5 class="fw-bold">Safety Guardrails</h5>
-                        <p class="text-muted">
-                            Built-in protections ensure you never price below cost or violate your business rules.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
-                            <i class="bi bi-lightning text-info fs-3"></i>
-                        </div>
-                        <h5 class="fw-bold">Real-Time Updates</h5>
-                        <p class="text-muted">
-                            Instant price updates across all marketplaces with real-time sync and monitoring.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
-                            <i class="bi bi-people text-danger fs-3"></i>
-                        </div>
-                        <h5 class="fw-bold">Multi-User Teams</h5>
-                        <p class="text-muted">
-                            Collaborate with your team using role-based permissions and audit trails.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <div class="bg-secondary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
-                            <i class="bi bi-bar-chart text-secondary fs-3"></i>
-                        </div>
-                        <h5 class="fw-bold">Advanced Analytics</h5>
-                        <p class="text-muted">
-                            Detailed reports and insights to track performance and optimize strategies.
-                        </p>
-                    </div>
+                <div id="modalGraphic" class="graphic-container">
+                    <!-- Interactive graphic will be injected here -->
                 </div>
             </div>
         </div>
     </div>
-</section>
 
-<!-- Pricing Section -->
-<section class="bg-light py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">Simple, Transparent Pricing</h2>
-            <p class="lead text-muted">Choose the plan that fits your business</p>
-        </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Simple Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.step-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        // Feature Modal Logic
+        const featureCards = document.querySelectorAll('.feature-card');
+        const modal = document.getElementById('featureModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalGraphic = document.getElementById('modalGraphic');
         
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <h5 class="fw-bold text-muted">Free</h5>
-                        <div class="display-6 fw-bold mb-3">$0</div>
-                        <p class="text-muted mb-4">Perfect for getting started</p>
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Up to 100 products</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Basic repricing rules</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Email support</li>
-                            <li class="mb-2"><i class="bi bi-x text-muted me-2"></i>Advanced analytics</li>
-                            <li class="mb-2"><i class="bi bi-x text-muted me-2"></i>ML-based pricing</li>
-                        </ul>
-                        <a href="{% url 'account_signup' %}" class="btn btn-outline-primary w-100">
-                            Get Started Free
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-primary shadow">
-                    <div class="card-header bg-primary text-white text-center">
-                        <small class="fw-bold">MOST POPULAR</small>
-                    </div>
-                    <div class="card-body text-center p-4">
-                        <h5 class="fw-bold text-primary">Pro</h5>
-                        <div class="display-6 fw-bold mb-3">$99<small class="fs-6 text-muted">/month</small></div>
-                        <p class="text-muted mb-4">For growing businesses</p>
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Up to 10,000 products</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Advanced repricing rules</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>ML-based pricing</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Advanced analytics</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Priority support</li>
-                        </ul>
-                        <a href="{% url 'account_signup' %}" class="btn btn-primary w-100">
-                            Start Free Trial
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <h5 class="fw-bold text-muted">Enterprise</h5>
-                        <div class="display-6 fw-bold mb-3">Custom</div>
-                        <p class="text-muted mb-4">For large organizations</p>
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Unlimited products</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Custom integrations</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Dedicated support</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>SLA guarantee</li>
-                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Custom features</li>
-                        </ul>
-                        <a href="{% url 'support' %}" class="btn btn-outline-primary w-100">
-                            Contact Sales
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        const featureContent = {
+            'ai-repricing': {
+                title: 'AI-Powered Repricing',
+                description: "Our advanced AI goes beyond simple rule-based repricing. It analyzes market velocity, competitor stock levels, historical pricing data, and even seasonal trends to predict the optimal price for maximizing both sales and profit margins. It's like having a data scientist constantly monitoring your listings.",
+                graphic: `<div class="ai-graphic"><div class="bar-container"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div>`
+            },
+            'conditional-repricing': {
+                title: 'Conditional Repricing',
+                description: "Create powerful, dynamic rule sets that adapt to any market situation. For example, automatically switch to a more aggressive strategy when you lose the Buy Box, or shift to a profit-focused strategy when a competitor goes out of stock. You set the conditions, Analiqo executes flawlessly.",
+                graphic: `<div class="conditional-graphic"><div class="node">Buy Box Lost?</div><div class="path"></div><div class="options"><div class="option">Aggressive Strategy</div><div class="option">Profit Strategy</div></div></div>`
+            },
+            'market-analysis': {
+                title: 'Market Analysis Tools',
+                description: "Gain a competitive edge with our comprehensive analytics suite. See your competitors' pricing history, track your Buy Box win percentage over time, and identify trends within your product categories. Make data-driven decisions to expand your catalog and sourcing strategies.",
+                graphic: `<div class="analysis-graphic"><div class="chart"><svg class="line" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="0,80 20,60 40,70 60,40 80,50 100,20"></polyline></svg></div></div>`
+            },
+            'profit-protection': {
+                title: 'Profit Protection',
+                description: "Never worry about a price war eroding your profits. Input your costs (including shipping, fees, and taxes), and Analiqo will calculate your break-even point. Our system ensures your price will never drop below your minimum configured profit margin, protecting your bottom line 24/7.",
+                graphic: `<div class="text-emerald-400"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg></div>`
+            },
+            'multi-tenant': {
+                title: 'Multi-Tenant SaaS',
+                description: "Perfect for agencies or sellers managing multiple brands. Our platform allows you to create separate, secure organizations under a single account. Manage user permissions, centralize billing, and view aggregated or individual performance reports with ease.",
+                graphic: `<div class="text-yellow-400"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path></svg></div>`
+            },
+            'integrations': {
+                title: 'Marketplace Integrations',
+                description: "We use the latest official APIs from Amazon (SP-API) and Flipkart to ensure the fastest, most reliable connection to your seller accounts. This means near-instantaneous price changes and accurate data you can trust to run your business.",
+                graphic: `<div class="text-rose-400"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>`
+            }
+        };
 
-<!-- CTA Section -->
-<section class="bg-primary text-white py-5">
-    <div class="container text-center">
-        <h2 class="display-5 fw-bold mb-4">Ready to Boost Your Profits?</h2>
-        <p class="lead mb-4">
-            Join thousands of sellers who have increased their revenue with our AI-powered repricing platform.
-        </p>
-        <a href="{% url 'account_signup' %}" class="btn btn-warning btn-lg px-5">
-            Start Your Free Trial Today
-        </a>
-        <div class="mt-4">
-            <small class="text-light opacity-75">
-                No setup fees • Cancel anytime • 14-day free trial
-            </small>
-        </div>
-    </div>
-</section>
-{% endblock %}
+        function openModal(featureKey) {
+            const content = featureContent[featureKey];
+            if (content) {
+                modalTitle.textContent = content.title;
+                modalDescription.textContent = content.description;
+                modalGraphic.innerHTML = content.graphic;
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.add('open'), 10); // For transition
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modalGraphic.innerHTML = ''; // Clear graphic on close
+            }, 300); 
+        }
+
+        featureCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const featureKey = card.dataset.feature;
+                openModal(featureKey);
+            });
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

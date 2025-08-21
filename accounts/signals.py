@@ -1,98 +1,50 @@
 """
-Signal handlers for accounts app.
+Django signals for accounts app.
 """
 
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from .models import Organization, Membership, Role
+import logging
+
+from .models import User, Organization, Membership, Invitation
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
 
 @receiver(post_save, sender=User)
-def create_user_organization(sender, instance, created, **kwargs):
-    """Create a personal organization for new users."""
-    if created and not instance.is_superuser:
-        # Create personal organization
-        org_name = f"{instance.first_name} {instance.last_name}".strip()
-        if not org_name:
-            org_name = instance.email.split('@')[0]
-        
-        organization = Organization.objects.create(
-            name=f"{org_name}'s Organization",
-            slug=f"{instance.id}-personal",
-        )
-        
-        # Get or create Owner role
-        owner_role, _ = Role.objects.get_or_create(
-            name='Owner',
-            defaults={
-                'description': 'Full access to organization',
-                'permissions': ['*'],  # All permissions
-                'is_system_role': True,
-            }
-        )
-        
-        # Create membership
-        Membership.objects.create(
-            user=instance,
-            organization=organization,
-            role=owner_role,
-            is_primary=True,
-            is_active=True,
-        )
+def user_created(sender, instance, created, **kwargs):
+    """Handle user creation."""
+    if created:
+        logger.info(f"New user created: {instance.email}")
+        # TODO: Send welcome email
+        # TODO: Create user profile
 
 
 @receiver(post_save, sender=Organization)
-def create_default_roles(sender, instance, created, **kwargs):
-    """Create default roles for new organizations."""
+def organization_created(sender, instance, created, **kwargs):
+    """Handle organization creation."""
     if created:
-        default_roles = [
-            {
-                'name': 'Owner',
-                'description': 'Full access to organization',
-                'permissions': ['*'],
-                'is_system_role': True,
-            },
-            {
-                'name': 'Admin',
-                'description': 'Administrative access to organization',
-                'permissions': [
-                    'organization.manage',
-                    'users.manage',
-                    'billing.view',
-                    'pricing.manage',
-                    'analytics.view',
-                    'repricing.manage',
-                ],
-                'is_system_role': True,
-            },
-            {
-                'name': 'Analyst',
-                'description': 'Analytics and reporting access',
-                'permissions': [
-                    'analytics.view',
-                    'pricing.view',
-                    'repricing.view',
-                    'catalog.view',
-                ],
-                'is_system_role': True,
-            },
-            {
-                'name': 'Operator',
-                'description': 'Operational access for day-to-day tasks',
-                'permissions': [
-                    'pricing.manage',
-                    'repricing.execute',
-                    'catalog.manage',
-                ],
-                'is_system_role': True,
-            },
-        ]
-        
-        for role_data in default_roles:
-            Role.objects.get_or_create(
-                name=role_data['name'],
-                defaults=role_data
-            )
+        logger.info(f"New organization created: {instance.name}")
+        # TODO: Set up default settings
+        # TODO: Create default roles if needed
+
+
+@receiver(post_save, sender=Membership)
+def membership_created(sender, instance, created, **kwargs):
+    """Handle membership creation."""
+    if created:
+        logger.info(f"New membership: {instance.user.email} joined {instance.organization.name}")
+        # TODO: Send invitation accepted email
+        # TODO: Log in audit system
+
+
+@receiver(post_save, sender=Invitation)
+def invitation_created(sender, instance, created, **kwargs):
+    """Handle invitation creation."""
+    if created:
+        logger.info(f"New invitation sent to: {instance.email}")
+        # TODO: Send invitation email
+        # TODO: Schedule reminder emails

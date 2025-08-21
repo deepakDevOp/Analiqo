@@ -58,7 +58,9 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "accounts",
+    "accounts.apps.AccountsConfig",
+    # Temporarily commented out other apps to isolate User model issue
+    "core",  # Core utilities and base classes  
     "billing",
     "credentials",
     "catalog",
@@ -71,25 +73,26 @@ LOCAL_APPS = [
     "adminpanel",
     "audit",
     "web",
-    "core",  # Core utilities and base classes
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
-    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # Temporarily commented out custom middleware that might cause import issues
     "accounts.middleware.OrganizationMiddleware",
-    "audit.middleware.AuditMiddleware",
+    "audit.middleware.AuditMiddleware", 
     "core.middleware.TimezoneMiddleware",
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
@@ -106,9 +109,10 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "accounts.context_processors.organization",
-                "billing.context_processors.subscription",
-                "notifications.context_processors.alerts",
+                # Temporarily commented out custom context processors
+                # "accounts.context_processors.organization",
+                # "billing.context_processors.subscription", 
+                # "notifications.context_processors.alerts",
             ],
         },
     },
@@ -188,6 +192,7 @@ SOCIALACCOUNT_ADAPTER = "accounts.adapters.SocialAccountAdapter"
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
+SIGNUP_REDIRECT_URL = "/onboarding/"
 
 # Email settings
 EMAIL_CONFIG = env.email_url("EMAIL_URL")
@@ -256,7 +261,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 # Guardian Settings
-GUARDIAN_MONKEY_PATCH = False
+GUARDIAN_MONKEY_PATCH_USER = False
 
 # Django Tables2 Settings
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5.html"
@@ -370,21 +375,7 @@ STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
 
 # Monitoring
 SENTRY_DSN = env("SENTRY_DSN", default="")
-if SENTRY_DSN:
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-    from sentry_sdk.integrations.celery import CeleryIntegration
-
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[
-            DjangoIntegration(auto_enabling=True),
-            CeleryIntegration(auto_enabling=True),
-        ],
-        traces_sample_rate=0.1,
-        send_default_pii=False,
-        environment=env("ENVIRONMENT", default="development"),
-    )
+# 2
 
 # Health Check URLs
 HEALTH_CHECK_URLS = {

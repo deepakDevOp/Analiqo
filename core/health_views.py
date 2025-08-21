@@ -12,6 +12,16 @@ import redis
 logger = logging.getLogger(__name__)
 
 
+def health_check(request):
+    """
+    Basic health check endpoint.
+    """
+    return JsonResponse({
+        "status": "healthy",
+        "message": "Application is running"
+    })
+
+
 def liveness_check(request):
     """
     Liveness probe - basic check that the application is running.

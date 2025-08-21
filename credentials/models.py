@@ -2,7 +2,8 @@
 Models for secure credential storage with encryption.
 """
 
-from django.db import modelsfrom django.utils.translation import gettext_lazy as _
+from django.db import models  
+from django.utils.translation import gettext_lazy as _
 from cryptography.fernet import Fernet
 from django.conf import settings
 import base64

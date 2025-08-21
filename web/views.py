@@ -29,12 +29,14 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'web/dashboard.html'
     login_url = reverse_lazy('account_login')
     
+    def dispatch(self, request, *args, **kwargs):
+        # Check if user has an organization. If not, redirect to onboarding.
+        if not getattr(request, 'organization', None):
+            return redirect('web:onboarding')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        # Check if user has completed onboarding
-        if not self.request.organization:
-            return redirect('web:onboarding')
         
         # Dashboard metrics
         context.update({
@@ -115,11 +117,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 class OnboardingView(LoginRequiredMixin, TemplateView):
     """Onboarding flow start."""
     
-    template_name = 'web/onboarding/start.html'
+    template_name = 'accounts/onboarding.html'
     
     def dispatch(self, request, *args, **kwargs):
-        # Check if user already has an organization set up
-        if request.organization and hasattr(request.organization, 'subscription'):
+        # If user already has an organization, redirect to the dashboard
+        if hasattr(request, 'organization') and request.organization:
             return redirect('web:dashboard')
         return super().dispatch(request, *args, **kwargs)
 
@@ -199,3 +201,37 @@ class RecentActivityView(LoginRequiredMixin, TemplateView):
         return context
     
     get_recent_activities = DashboardView.get_recent_activities
+
+
+# Error handlers
+from django.http import HttpResponseNotFound, HttpResponseServerError, HttpResponseForbidden
+
+
+def handler404(request, exception):
+    """Custom 404 error handler."""
+    context = {
+        'error_code': '404',
+        'error_title': 'Page Not Found',
+        'error_message': 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.',
+    }
+    return HttpResponseNotFound(render(request, 'errors/error.html', context))
+
+
+def handler500(request):
+    """Custom 500 error handler."""
+    context = {
+        'error_code': '500',
+        'error_title': 'Server Error',
+        'error_message': 'An unexpected error occurred. Our team has been notified and is working to resolve the issue.',
+    }
+    return HttpResponseServerError(render(request, 'errors/error.html', context))
+
+
+def handler403(request, exception):
+    """Custom 403 error handler."""
+    context = {
+        'error_code': '403',
+        'error_title': 'Access Forbidden',
+        'error_message': 'You do not have permission to access this resource.',
+    }
+    return HttpResponseForbidden(render(request, 'errors/error.html', context))
