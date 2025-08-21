@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - Analiqo{% endblock title %}
+
+{% block extra_head %}
+<link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+{% endblock extra_head %}
+
+{% block content %}
+<body class="bg-slate-100 text-slate-800">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-md flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold text-slate-900">MyCorp</h1>
+            </div>
+            <nav class="mt-6">
+                <a href="#" class="flex items-center px-6 py-3 text-blue-600 bg-blue-50">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="ml-4 font-semibold">Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="ml-4 font-semibold">Team</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    <span class="ml-4 font-semibold">Projects</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span class="ml-4 font-semibold">Calendar</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="ml-4 font-semibold">Reports</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <main class="flex-1">
+            <!-- Header -->
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <div class="flex items-center">
+                     <button id="menu-btn" class="text-slate-600 mr-4 md:hidden">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <h2 class="text-xl font-bold text-slate-900">Dashboard Overview</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden sm:block">
+                        <input type="text" placeholder="Search..." class="w-full py-2 pl-10 pr-4 border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <button class="text-slate-500 hover:text-slate-700">
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    </button>
+                    <div class="relative">
+                        <img src="https://placehold.co/40x40/E2E8F0/475569?text=AV" alt="Avatar" class="w-10 h-10 rounded-full">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="p-6 md:p-8">
+                <!-- Stat Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-slate-500">Total Revenue</p>
+                                <p class="text-3xl font-bold text-slate-900">$42,389</p>
+                            </div>
+                            <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-500 mt-2 flex items-center">+12.5% vs last month</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-slate-500">New Users</p>
+                                <p class="text-3xl font-bold text-slate-900">1,204</p>
+                            </div>
+                             <div class="bg-green-100 text-green-600 p-3 rounded-full">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-green-500 mt-2 flex items-center">+8.2% vs last month</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-slate-500">Active Subscriptions</p>
+                                <p class="text-3xl font-bold text-slate-900">3,456</p>
+                            </div>
+                             <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
+                               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-red-500 mt-2 flex items-center">-1.8% vs last month</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-slate-500">Pending Tickets</p>
+                                <p class="text-3xl font-bold text-slate-900">27</p>
+                            </div>
+                             <div class="bg-red-100 text-red-600 p-3 rounded-full">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728m12.728 0L5.636 5.636"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2 flex items-center">3 urgent</p>
+                    </div>
+                </div>
+
+                <!-- Charts and Tables -->
+                <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Sales Chart -->
+                    <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-4">Sales Performance</h3>
+                        <div class="h-80 bg-slate-50 rounded-md flex items-center justify-center">
+                            <p class="text-slate-400">Chart Placeholder</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-4">Recent Activity</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center">
+                                <img src="https://placehold.co/32x32/E2E8F0/475569?text=JS" alt="User" class="w-8 h-8 rounded-full mr-3">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-800">John Smith upgraded to Pro</p>
+                                    <p class="text-xs text-slate-500">2 minutes ago</p>
+                                </div>
+                            </li>
+                             <li class="flex items-center">
+                                <img src="https://placehold.co/32x32/E2E8F0/475569?text=AD" alt="User" class="w-8 h-8 rounded-full mr-3">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-800">Anna Doe submitted a ticket</p>
+                                    <p class="text-xs text-slate-500">15 minutes ago</p>
+                                </div>
+                            </li>
+                             <li class="flex items-center">
+                                <img src="https://placehold.co/32x32/E2E8F0/475569?text=MB" alt="User" class="w-8 h-8 rounded-full mr-3">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-800">Mike Brown joined the team</p>
+                                    <p class="text-xs text-slate-500">1 hour ago</p>
+                                </div>
+                            </li>
+                             <li class="flex items-center">
+                                <img src="https://placehold.co/32x32/E2E8F0/475569?text=LW" alt="User" class="w-8 h-8 rounded-full mr-3">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-800">Lisa White paid an invoice</p>
+                                    <p class="text-xs text-slate-500">3 hours ago</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Recent Orders Table -->
+                <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-4">Recent Orders</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-xs font-semibold text-slate-500 border-b border-slate-200">
+                                    <th class="p-3">Invoice ID</th>
+                                    <th class="p-3">Customer</th>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Amount</th>
+                                    <th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-slate-200">
+                                    <td class="p-3 font-medium text-slate-800">#INV-00123</td>
+                                    <td class="p-3">Carlos Sanchez</td>
+                                    <td class="p-3">Aug 22, 2025</td>
+                                    <td class="p-3">$1,250.00</td>
+                                    <td class="p-3"><span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Paid</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-200">
+                                    <td class="p-3 font-medium text-slate-800">#INV-00122</td>
+                                    <td class="p-3">Sara Johnson</td>
+                                    <td class="p-3">Aug 21, 2025</td>
+                                    <td class="p-3">$750.50</td>
+                                    <td class="p-3"><span class="px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">Pending</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-200">
+                                    <td class="p-3 font-medium text-slate-800">#INV-00121</td>
+                                    <td class="p-3">David Miller</td>
+                                    <td class="p-3">Aug 21, 2025</td>
+                                    <td class="p-3">$2,500.00</td>
+                                    <td class="p-3"><span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium text-slate-800">#INV-00120</td>
+                                    <td class="p-3">Jessica Williams</td>
+                                    <td class="p-3">Aug 20, 2025</td>
+                                    <td class="p-3">$350.00</td>
+                                    <td class="p-3"><span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">Overdue</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+{% endblock content %}
+

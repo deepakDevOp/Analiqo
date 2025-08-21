@@ -25,40 +25,12 @@ class AccountAdapter(DefaultAccountAdapter):
         return user
     
     def get_login_redirect_url(self, request):
-        """Custom login redirect logic."""
-        print(f"DEBUG: get_login_redirect_url called for user: {request.user}")
-        print(f"DEBUG: User authenticated: {request.user.is_authenticated}")
-        
-        # If user has memberships, redirect to dashboard
-        if hasattr(request, 'user') and request.user.is_authenticated:
-            print(f"DEBUG: Checking memberships for user: {request.user}")
-            if request.user.memberships.exists():
-                print(f"DEBUG: User has memberships, redirecting to dashboard")
-                return '/dashboard/'
-            else:
-                print(f"DEBUG: User has no memberships, redirecting to onboarding")
-                # If user has no memberships, redirect to onboarding
-                return '/onboarding/'
-        
-        print(f"DEBUG: Fallback to default behavior")
-        # Fallback to default behavior
-        return super().get_login_redirect_url(request)
+        """Always redirect to dashboard after login."""
+        return '/dashboard/'
     
     def get_signup_redirect_url(self, request):
-        """Redirect new users to onboarding after signup."""
-        return '/onboarding/'
-    
-    def get_redirect_url(self, request):
-        """Override the main redirect method to ensure proper redirection."""
-        # For login, check if user has memberships
-        if hasattr(request, 'user') and request.user.is_authenticated:
-            if request.user.memberships.exists():
-                return '/dashboard/'
-            else:
-                return '/onboarding/'
-        
-        # Fallback to default behavior
-        return super().get_redirect_url(request)
+        """Always redirect to dashboard after signup."""
+        return '/dashboard/'
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):

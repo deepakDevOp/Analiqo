@@ -36,18 +36,12 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
-# Django Debug Toolbar
-if DEBUG:
-    INSTALLED_APPS += ["debug_toolbar"]
-    MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
-    
-    INTERNAL_IPS = [
-        "127.0.0.1",
-        "localhost",
-    ]
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "localhost",
+]
 
-# Development-specific settings
-CELERY_TASK_ALWAYS_EAGER = True  # Execute tasks synchronously in development
+CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 
 # Disable secure settings for development
@@ -55,37 +49,33 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
-# Allow all CORS origins in development
-CORS_ALLOW_ALL_ORIGINS = True
-
-# Use sandbox APIs in development
-USE_SANDBOX_APIS = True
-
-# Feature flags for development
-FLAGS["ML_PRICING_ENABLED"][0]["value"] = True
-FLAGS["ADVANCED_ANALYTICS"][0]["value"] = True
-FLAGS["FLIPKART_INTEGRATION"][0]["value"] = True
+## Minimal dev settings; advanced flags removed
 
 # Logging for development
-LOGGING["handlers"]["console"]["level"] = "DEBUG"
-LOGGING["loggers"]["repricing_platform"]["level"] = "DEBUG"
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+        }
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
+    },
+}
 
-# Django Extensions
-INSTALLED_APPS += ["django_extensions"]
+## Debug toolbar in development
+INSTALLED_APPS += ["debug_toolbar"]
+MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
 
-# Shell Plus
-SHELL_PLUS_PRE_IMPORTS = [
-    ("django.test", "TestCase"),
-    ("django.contrib.auth", "get_user_model"),
-]
+## Shell plus pre-imports removed
 
-# Development API Keys (use sandbox/test keys)
-AMAZON_SP_API["USE_SANDBOX"] = True
-FLIPKART_API["USE_SANDBOX"] = True
+## Sandbox API flags removed in minimal setup
 
-# Stripe test keys
-STRIPE_PUBLISHABLE_KEY = env("STRIPE_TEST_PUBLISHABLE_KEY", default="pk_test_...")
-STRIPE_SECRET_KEY = env("STRIPE_TEST_SECRET_KEY", default="sk_test_...")
+STRIPE_PUBLISHABLE_KEY = ""
+STRIPE_SECRET_KEY = ""
 
-# Create demo data on startup
-CREATE_DEMO_DATA = env("CREATE_DEMO_DATA", default=True)
+CREATE_DEMO_DATA = False

@@ -7,8 +7,25 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import EmailValidator
 from django.utils.translation import gettext_lazy as _
-from timezone_field import TimeZoneField
-from core.models import TimeStampedModel, UUIDModel
+from django.conf import settings
+from django.db import models as dj_models
+
+
+class TimeStampedModel(dj_models.Model):
+    """Abstract base class with created and updated timestamps."""
+    created_at = dj_models.DateTimeField(auto_now_add=True)
+    updated_at = dj_models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class UUIDModel(dj_models.Model):
+    """Abstract base class with UUID primary key."""
+    id = dj_models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    class Meta:
+        abstract = True
 
 
 class UserManager(BaseUserManager):
@@ -45,7 +62,7 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=150)
     last_name = models.CharField(_('last name'), max_length=150)
-    timezone = TimeZoneField(default='UTC')
+    timezone = models.CharField(max_length=50, default='UTC')
     phone = models.CharField(max_length=20, blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     
@@ -112,7 +129,7 @@ class Organization(UUIDModel, TimeStampedModel):
     country = models.CharField(max_length=2, blank=True)  # ISO country code
     
     # Settings
-    timezone = TimeZoneField(default='UTC')
+    timezone = models.CharField(max_length=50, default='UTC')
     currency = models.CharField(max_length=3, default='USD')  # ISO currency code
     
     # Business details

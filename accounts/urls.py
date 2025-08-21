@@ -8,9 +8,6 @@ from . import views
 app_name = 'accounts'
 
 urlpatterns = [
-    # Onboarding
-    path('onboarding/', views.OnboardingView.as_view(), name='onboarding'),
-    
     # Organization management
     path('organizations/create/', views.OrganizationCreateView.as_view(), name='organization_create'),
     path('organizations/switch/', views.OrganizationSwitchView.as_view(), name='organization_switch'),

@@ -1,134 +1,49 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Create Organization{% endblock %}
+{% block title %}Create Organization - Analiqo{% endblock title %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-building me-2"></i>Create Your Organization
-                    </h4>
+                <div class="card-header">
+                    <h4 class="mb-0">Create Your Organization</h4>
                 </div>
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.name.id_for_label }}" class="form-label">Organization Name *</label>
-                                {{ form.name }}
-                                {% if form.name.errors %}
-                                    <div class="text-danger">{{ form.name.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.website.id_for_label }}" class="form-label">Website</label>
-                                {{ form.website }}
-                                {% if form.website.errors %}
-                                    <div class="text-danger">{{ form.website.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
                         <div class="mb-3">
-                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            <label for="{{ form.name.id_for_label }}" class="form-label">Organization Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.name.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if form.description %}
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description (Optional)</label>
                             {{ form.description }}
                             {% if form.description.errors %}
-                                <div class="text-danger">{{ form.description.errors }}</div>
+                                <div class="text-danger">
+                                    {% for error in form.description.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
                             {% endif %}
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.email.id_for_label }}" class="form-label">Contact Email</label>
-                                {{ form.email }}
-                                {% if form.email.errors %}
-                                    <div class="text-danger">{{ form.email.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.phone.id_for_label }}" class="form-label">Phone</label>
-                                {{ form.phone }}
-                                {% if form.phone.errors %}
-                                    <div class="text-danger">{{ form.phone.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="{{ form.address_line1.id_for_label }}" class="form-label">Address</label>
-                            {{ form.address_line1 }}
-                            {% if form.address_line1.errors %}
-                                <div class="text-danger">{{ form.address_line1.errors }}</div>
-                            {% endif %}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form.address_line2 }}
-                            {% if form.address_line2.errors %}
-                                <div class="text-danger">{{ form.address_line2.errors }}</div>
-                            {% endif %}
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.city.id_for_label }}" class="form-label">City</label>
-                                {{ form.city }}
-                                {% if form.city.errors %}
-                                    <div class="text-danger">{{ form.city.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.state.id_for_label }}" class="form-label">State/Province</label>
-                                {{ form.state }}
-                                {% if form.state.errors %}
-                                    <div class="text-danger">{{ form.state.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.postal_code.id_for_label }}" class="form-label">ZIP/Postal Code</label>
-                                {{ form.postal_code }}
-                                {% if form.postal_code.errors %}
-                                    <div class="text-danger">{{ form.postal_code.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.country.id_for_label }}" class="form-label">Country</label>
-                                {{ form.country }}
-                                {% if form.country.errors %}
-                                    <div class="text-danger">{{ form.country.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.timezone.id_for_label }}" class="form-label">Timezone</label>
-                                {{ form.timezone }}
-                                {% if form.timezone.errors %}
-                                    <div class="text-danger">{{ form.timezone.errors }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="{{ form.currency.id_for_label }}" class="form-label">Currency</label>
-                                {{ form.currency }}
-                                {% if form.currency.errors %}
-                                    <div class="text-danger">{{ form.currency.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-
+                        {% endif %}
+                        
                         <div class="d-flex justify-content-between">
-                            <a href="{% url 'accounts:onboarding' %}" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left me-2"></i>Back
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-circle me-2"></i>Create Organization
-                            </button>
+                            <a href="{% url 'web:dashboard' %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create Organization</button>
                         </div>
                     </form>
                 </div>
@@ -136,4 +51,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

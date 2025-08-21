@@ -1,0 +1,373 @@
+/* Dashboard Styles */
+.dashboard-container {
+    padding: 2rem 0;
+}
+
+.dashboard-header {
+    margin-bottom: 2rem;
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+/* No Organization State */
+.no-organization-state {
+    padding: 4rem 0;
+}
+
+.welcome-card {
+    background: white;
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f3f4;
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    color: #4f46e5;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-card h3 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.welcome-features {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.feature-item i {
+    margin-right: 0.75rem;
+    font-size: 1.125rem;
+}
+
+/* Metrics Cards */
+.metrics-section {
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f1f3f4;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.metric-card {
+    display: flex;
+    align-items: center;
+}
+
+.metric-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.metric-icon i {
+    font-size: 1.25rem;
+}
+
+.metric-content {
+    flex-grow: 1;
+}
+
+.metric-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+/* Dashboard Widgets */
+.dashboard-widget {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f1f3f4;
+    overflow: hidden;
+    height: 100%;
+}
+
+.widget-header {
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.widget-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.widget-title i {
+    margin-right: 0.5rem;
+    color: #4f46e5;
+}
+
+.widget-body {
+    padding: 1.5rem;
+    height: calc(100% - 80px);
+    overflow-y: auto;
+}
+
+/* Activity List */
+.activity-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    flex-shrink: 0;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.activity-icon i {
+    font-size: 0.5rem;
+    color: #4f46e5;
+}
+
+.activity-content {
+    flex-grow: 1;
+}
+
+.activity-description {
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
+
+.activity-meta {
+    font-size: 0.8125rem;
+    color: #6b7280;
+}
+
+.activity-time,
+.activity-user {
+    margin-right: 0.75rem;
+}
+
+/* Alert List */
+.alert-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.alert-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid;
+}
+
+.alert-item:last-child {
+    margin-bottom: 0;
+}
+
+.alert-item.alert-info {
+    background: #eff6ff;
+    border-left-color: #3b82f6;
+}
+
+.alert-item.alert-warning {
+    background: #fefce8;
+    border-left-color: #eab308;
+}
+
+.alert-item.alert-danger {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+}
+
+.alert-item.alert-success {
+    background: #f0fdf4;
+    border-left-color: #22c55e;
+}
+
+.alert-title {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.alert-time {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.quick-action-btn {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    border: 2px solid #f3f4f6;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.quick-action-btn:hover {
+    border-color: #4f46e5;
+    color: #4f46e5;
+    text-decoration: none;
+    background: #f8fafc;
+}
+
+.quick-action-btn i {
+    margin-right: 0.75rem;
+    font-size: 1.125rem;
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6b7280;
+}
+
+.empty-state i {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    color: #d1d5db;
+}
+
+.empty-state p {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem 0;
+    }
+    
+    .dashboard-title {
+        font-size: 2rem;
+    }
+    
+    .welcome-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .metric-card {
+        margin-bottom: 1rem;
+    }
+    
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .metric-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .metric-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .activity-item {
+        flex-direction: column;
+    }
+    
+    .activity-icon {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #4f46e5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+} 

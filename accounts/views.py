@@ -1,5 +1,5 @@
 """
-Views for user authentication, organization management, and onboarding.
+Views for user authentication and organization management.
 """
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -19,28 +19,6 @@ from .models import Organization, Membership, Invitation, Role
 from .forms import OrganizationCreateForm, InvitationForm
 
 
-class OnboardingView(LoginRequiredMixin, TemplateView):
-    """Onboarding flow for new users."""
-    template_name = 'accounts/onboarding.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        # Check if user already has organizations
-        user_orgs = self.request.user.memberships.filter(is_active=True)
-        
-        context.update({
-            'user_organizations': user_orgs,
-            'has_organizations': user_orgs.exists(),
-            'pending_invitations': Invitation.objects.filter(
-                email=self.request.user.email,
-                status='pending'
-            )
-        })
-        
-        return context
-
-
 class OrganizationCreateView(LoginRequiredMixin, CreateView):
     """Create a new organization."""
     model = Organization
@@ -50,33 +28,34 @@ class OrganizationCreateView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):
         with transaction.atomic():
-            # Create the organization
             response = super().form_valid(form)
             
-            # Get or create owner role
-            owner_role, _ = Role.objects.get_or_create(
-                name='Owner',
+            # Create owner membership for the user
+            admin_role, _ = Role.objects.get_or_create(
+                name='admin',
                 defaults={
-                    'description': 'Organization owner with full access',
-                    'permissions': ['*'],  # All permissions
-                    'is_system_role': True
+                    'permissions': {
+                        'manage_organization': True,
+                        'manage_users': True,
+                        'manage_billing': True,
+                        'view_analytics': True,
+                        'manage_repricing': True,
+                    }
                 }
             )
             
-            # Add user as owner
             Membership.objects.create(
                 user=self.request.user,
                 organization=self.object,
-                role=owner_role,
-                is_active=True,
-                is_primary=True
+                role=admin_role,
+                is_active=True
             )
             
-            # Set as current organization in session
+            # Set this as the current organization
             self.request.session['current_organization_id'] = str(self.object.id)
             
             messages.success(
-                self.request, 
+                self.request,
                 f'Organization "{self.object.name}" created successfully!'
             )
             
@@ -140,7 +119,6 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['organization'] = self.request.organization
-        kwargs['user'] = self.request.user
         return kwargs
     
     def form_valid(self, form):
@@ -148,90 +126,23 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
         form.instance.invited_by = self.request.user
         
         # Generate unique token
-        form.instance.token = uuid.uuid4().hex
-        
-        # Set expiry (30 days from now)
-        form.instance.expires_at = timezone.now() + timezone.timedelta(days=30)
+        form.instance.token = str(uuid.uuid4())
         
         response = super().form_valid(form)
         
-        # TODO: Send invitation email
+        # TODO: Send invitation email here
+        # send_invitation_email(form.instance)
+        
         messages.success(
-            self.request, 
+            self.request,
             f'Invitation sent to {form.instance.email}'
         )
         
         return response
 
 
-class InvitationAcceptView(TemplateView):
-    """Accept an organization invitation."""
-    template_name = 'accounts/invitation_accept.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        token = kwargs.get('token')
-        invitation = get_object_or_404(
-            Invitation,
-            token=token,
-            status='pending'
-        )
-        
-        context['invitation'] = invitation
-        context['can_accept'] = invitation.can_be_accepted()
-        
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        token = kwargs.get('token')
-        invitation = get_object_or_404(
-            Invitation,
-            token=token,
-            status='pending'
-        )
-        
-        if not invitation.can_be_accepted():
-            messages.error(request, 'This invitation has expired or is no longer valid')
-            return redirect('account_login')
-        
-        if not request.user.is_authenticated:
-            # Store token in session and redirect to login
-            request.session['pending_invitation_token'] = token
-            messages.info(request, 'Please log in to accept the invitation')
-            return redirect('account_login')
-        
-        with transaction.atomic():
-            # Create membership
-            Membership.objects.create(
-                user=request.user,
-                organization=invitation.organization,
-                role=invitation.role,
-                is_active=True,
-                invited_by=invitation.invited_by,
-                invitation_accepted_at=timezone.now()
-            )
-            
-            # Update invitation
-            invitation.status = 'accepted'
-            invitation.accepted_at = timezone.now()
-            invitation.accepted_by = request.user
-            invitation.save()
-            
-            # Set as current organization if user doesn't have one
-            if not request.session.get('current_organization_id'):
-                request.session['current_organization_id'] = str(invitation.organization.id)
-            
-            messages.success(
-                request, 
-                f'Welcome to {invitation.organization.name}!'
-            )
-        
-        return redirect('web:dashboard')
-
-
 class InvitationListView(LoginRequiredMixin, ListView):
-    """List organization invitations."""
+    """List invitations for the current organization."""
     model = Invitation
     template_name = 'accounts/invitation_list.html'
     context_object_name = 'invitations'
@@ -246,23 +157,115 @@ class InvitationListView(LoginRequiredMixin, ListView):
         ).order_by('-created_at')
 
 
+class InvitationAcceptView(DetailView):
+    """Accept an invitation to join an organization."""
+    model = Invitation
+    template_name = 'accounts/invitation_accept.html'
+    slug_field = 'token'
+    slug_url_kwarg = 'token'
+    
+    def get_queryset(self):
+        return Invitation.objects.filter(
+            status='pending',
+            expires_at__gt=timezone.now()
+        )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        invitation = self.get_object()
+        
+        # Check if user is already authenticated
+        if self.request.user.is_authenticated:
+            # Check if user email matches invitation
+            if self.request.user.email != invitation.email:
+                context['email_mismatch'] = True
+        
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        invitation = self.get_object()
+        
+        # Validate user email matches invitation
+        if request.user.email != invitation.email:
+            messages.error(request, 'Your email does not match the invitation.')
+            return redirect('web:dashboard')
+        
+        # Check if user is already a member
+        existing_membership = Membership.objects.filter(
+            user=request.user,
+            organization=invitation.organization,
+            is_active=True
+        ).first()
+        
+        if existing_membership:
+            messages.info(request, 'You are already a member of this organization.')
+            invitation.status = 'accepted'
+            invitation.accepted_at = timezone.now()
+            invitation.save()
+            return redirect('web:dashboard')
+        
+        # Create membership
+        with transaction.atomic():
+            # Get default role (if specified) or member role
+            role = invitation.role
+            if not role:
+                role, _ = Role.objects.get_or_create(
+                    name='member',
+                    defaults={
+                        'permissions': {
+                            'view_analytics': True,
+                            'manage_repricing': False,
+                        }
+                    }
+                )
+            
+            Membership.objects.create(
+                user=request.user,
+                organization=invitation.organization,
+                role=role,
+                is_active=True
+            )
+            
+            # Mark invitation as accepted
+            invitation.status = 'accepted'
+            invitation.accepted_at = timezone.now()
+            invitation.save()
+            
+            # Set as current organization
+            request.session['current_organization_id'] = str(invitation.organization.id)
+        
+        messages.success(
+            request,
+            f'Successfully joined {invitation.organization.name}!'
+        )
+        
+        return redirect('web:dashboard')
+
+
 @login_required
 def profile_view(request):
-    """User profile view."""
-    return render(request, 'accounts/profile.html', {
-        'user': request.user,
-        'organizations': request.user.memberships.filter(is_active=True)
-    })
+    """User profile view and edit."""
+    # Implementation here
+    return render(request, 'accounts/profile.html', {'user': request.user})
 
 
-@login_required
+@login_required  
 def organization_settings_view(request):
     """Organization settings view."""
     if not request.organization:
-        messages.error(request, 'No organization selected')
-        return redirect('accounts:onboarding')
+        return redirect('web:dashboard')
     
+    # Check if user has permission to manage organization
+    membership = request.user.memberships.filter(
+        organization=request.organization,
+        is_active=True
+    ).first()
+    
+    if not membership or not membership.role.permissions.get('manage_organization', False):
+        messages.error(request, 'You do not have permission to manage organization settings.')
+        return redirect('web:dashboard')
+    
+    # Implementation here
     return render(request, 'accounts/organization_settings.html', {
-        'organization': request.organization,
-        'members': request.organization.memberships.filter(is_active=True)
+        'organization': request.organization
     })
