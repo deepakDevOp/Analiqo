@@ -35,7 +35,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "accounts.apps.AccountsConfig",
+    "user.apps.UserConfig",
     "web",
 ]
 
@@ -50,8 +50,6 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # Project middleware
-    "accounts.middleware.OrganizationMiddleware",
 ]
 
 ROOT_URLCONF = "repricing_platform.urls"
@@ -67,7 +65,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "accounts.context_processors.organization",
+                # Removed organization context processor for minimal setup
                 # "billing.context_processors.subscription", 
                 # "notifications.context_processors.alerts",
             ],
@@ -139,7 +137,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom User Model
-AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "user.User"
 
 # Site ID
 SITE_ID = 1
@@ -151,18 +149,21 @@ AUTHENTICATION_BACKENDS = [
 
 # Allauth configuration (minimal)
 ACCOUNT_EMAIL_VERIFICATION = "optional"
-ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
-ACCOUNT_SIGNUP_FORM_CLASS = "accounts.forms.SignupForm"
-ACCOUNT_ADAPTER = "accounts.adapters.AccountAdapter"
+ACCOUNT_SIGNUP_FORM_CLASS = "user.forms.SignupForm"
+ACCOUNT_ADAPTER = "user.adapters.AccountAdapter"
+ACCOUNT_LOGOUT_ON_GET = True
 
 # Login/Logout URLs
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/dashboard/"
+LOGIN_REDIRECT_URL = "/home/"
 LOGOUT_REDIRECT_URL = "/"
-SIGNUP_REDIRECT_URL = "/dashboard/"
+SIGNUP_REDIRECT_URL = "/accounts/login"
 
 # Email settings (console backend by default)
 EMAIL_BACKEND = get_env("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")

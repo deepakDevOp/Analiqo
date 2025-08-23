@@ -14,8 +14,7 @@ urlpatterns = [
     # Auth via django-allauth
     path("accounts/", include("allauth.urls")),
 
-    # Project apps
-    path("accounts/", include("accounts.urls")),
+    # Project app: landing only
     path("", include("web.urls")),
 ]
 

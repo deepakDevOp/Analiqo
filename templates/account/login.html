@@ -107,9 +107,9 @@
             <form id="signin-form" action="{% url 'account_login' %}" method="POST" class="space-y-4">
                 {% csrf_token %}
                                  <div>
-                     <label for="login" class="block text-left text-sm font-medium text-slate-400 mb-2">Email Address</label>
-                     <input type="email" id="login" name="login" class="w-full input-field rounded-lg px-4 py-3" placeholder="you@example.com" required>
-                 </div>
+                    <label for="login" class="block text-left text-sm font-medium text-slate-400 mb-2">Email or Username</label>
+                    <input type="text" id="login" name="login" class="w-full input-field rounded-lg px-4 py-3" placeholder="you@example.com or username" required>
+                </div>
                 <div>
                     <div class="flex items-center justify-between mb-2">
                         <label for="password" class="block text-sm font-medium text-slate-400">Password</label>
