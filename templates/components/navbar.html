@@ -6,17 +6,33 @@
     <nav class="hidden md:flex items-center gap-2">
       {% for item in items %}
         {% if item.submenu %}
-          <div class="relative group">
-            <button class="text-gray-300 hover:text-white px-3 py-2 flex items-center">
-              {{ item.name }}
-              <svg class="w-4 h-4 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="absolute hidden group-hover:block bg-slate-800 rounded-lg shadow-lg mt-2 py-2 min-w-[10rem]">
-              {% for child in item.submenu %}
-                <a href="{{ child.url }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">{{ child.name }}</a>
-              {% endfor %}
-            </div>
+        <div class="relative">
+          <input type="checkbox" id="dropdown-toggle-{{ forloop.counter }}" class="peer hidden" />
+          <label
+            for="dropdown-toggle-{{ forloop.counter }}"
+            class="text-gray-300 hover:text-white px-3 py-2 flex items-center cursor-pointer"
+          >
+            {{ item.name }}
+            <svg
+              class="w-4 h-4 ml-1"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </label>
+          <div
+            class="absolute hidden bg-slate-800 rounded-lg shadow-lg mt-2 py-2 min-w-[10rem] peer-checked:block"
+          >
+            {% for child in item.submenu %}
+              <a href="{{ child.url }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-slate-700">{{ child.name }}</a>
+            {% endfor %}
           </div>
+        </div>
         {% else %}
           <a href="{{ item.url }}" class="text-gray-300 hover:text-white px-3 py-2">{{ item.name }}</a>
         {% endif %}
