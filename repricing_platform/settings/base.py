@@ -36,6 +36,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "user.apps.UserConfig",
+    "core.apps.CoreConfig",
     "web",
 ]
 
@@ -65,6 +66,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.menus",
                 # Removed organization context processor for minimal setup
                 # "billing.context_processors.subscription", 
                 # "notifications.context_processors.alerts",
