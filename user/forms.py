@@ -3,6 +3,8 @@ Forms for minimal authentication customizations.
 """
 
 from django import forms
+from django.forms import ModelForm
+from .models import User
 
 
 class SignupForm(forms.Form):
@@ -39,4 +41,18 @@ class SignupForm(forms.Form):
         user.email = self.cleaned_data['email']
         user.save()
 
+
+class UserUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'timezone',
+            'phone',
+            'avatar',
+            'notification_preferences',
+            'ui_preferences',
+        ]
 

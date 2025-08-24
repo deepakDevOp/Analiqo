@@ -175,7 +175,8 @@
                 </div>
                 <a href="#pricing" class="text-gray-300 hover:text-white px-3 py-2 nav-link">Pricing</a>
                 <a href="#contact" class="text-gray-300 hover:text-white px-3 py-2 nav-link">Contact</a>
-                <a href="/accounts/login/" class="bg-white text-slate-900 font-semibold rounded-lg px-4 py-2 ml-4 hover:bg-gray-200 transition-colors">Sign In</a>
+                <a href="{% url 'account_signup' %}" class="bg-white text-slate-900 font-semibold rounded-lg px-4 py-2 ml-4 hover:bg-gray-200 transition-colors">Sign Up</a>
+                <a href="{% url 'account_login' %}" class="bg-slate-100/10 text-white font-semibold rounded-lg px-4 py-2 ml-2 border border-slate-700 hover:bg-slate-800 transition-colors">Sign In</a>
             </nav>
             
             <!-- Mobile menu button -->
@@ -191,8 +192,8 @@
                 <a href="#pricing" class="block text-gray-300 hover:text-white py-2">Pricing</a>
                 <a href="#contact" class="block text-gray-300 hover:text-white py-2">Contact</a>
                 <div class="flex flex-col space-y-2 pt-4 border-t border-slate-700">
-                    <a href="/accounts/login/" class="bg-slate-800 text-white font-semibold rounded-lg px-4 py-2 text-center hover:bg-slate-700 transition-colors">Sign In</a>
-                    <a href="/accounts/signup/" class="bg-white text-slate-900 font-semibold rounded-lg px-4 py-2 text-center hover:bg-gray-200 transition-colors">Sign Up Free</a>
+                    <a href="{% url 'account_login' %}" class="bg-slate-800 text-white font-semibold rounded-lg px-4 py-2 text-center hover:bg-slate-700 transition-colors">Sign In</a>
+                    <a href="{% url 'account_signup' %}" class="bg-white text-slate-900 font-semibold rounded-lg px-4 py-2 text-center hover:bg-gray-200 transition-colors">Sign Up Free</a>
                 </div>
             </div>
         </div>
@@ -216,7 +217,7 @@
                     Analiqo's AI engine works 24/7 to win the Buy Box, optimize profits, and eliminate manual price adjustments on Amazon & Flipkart.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <a href="/accounts/signup/" class="w-full sm:w-auto btn-primary-glow text-white font-semibold rounded-lg px-8 py-3 text-center">
+                    <a href="{% url 'account_signup' %}" class="w-full sm:w-auto btn-primary-glow text-white font-semibold rounded-lg px-8 py-3 text-center">
                         Start 14-Day Free Trial
                     </a>
                     <a href="#contact" class="w-full sm:w-auto bg-slate-800 border border-slate-700 text-white font-semibold rounded-lg px-8 py-3 text-center hover:bg-slate-700 transition-colors">
@@ -346,7 +347,7 @@
                             <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Multiple Marketplaces</li>
                             <li class="flex items-center"><i data-lucide="check" class="w-5 h-5 text-emerald-400 mr-3"></i> Priority email support</li>
                         </ul>
-                        <a href="/accounts/signup/" class="w-full btn-primary-glow text-white font-semibold rounded-lg px-6 py-3 text-center block">Start Free Trial</a>
+                        <a href="{% url 'account_signup' %}" class="w-full btn-primary-glow text-white font-semibold rounded-lg px-6 py-3 text-center block">Start Free Trial</a>
                     </div>
 
                     <!-- Enterprise Plan -->
@@ -372,7 +373,7 @@
                  <div class="relative max-w-4xl mx-auto p-12 rounded-2xl overflow-hidden animated-gradient-bg">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-white">Ready to Automate Your Growth?</h2>
                     <p class="text-lg text-white/80 mt-4 mb-8 max-w-xl mx-auto">Stop leaving money on the table. Join hundreds of sellers winning the Buy Box and increasing profits with Analiqo.</p>
-                    <a href="/accounts/signup/" class="bg-white text-slate-900 font-bold rounded-lg px-8 py-4 text-center hover:bg-gray-200 transition-transform hover:scale-105 inline-block">
+                    <a href="{% url 'account_signup' %}" class="bg-white text-slate-900 font-bold rounded-lg px-8 py-4 text-center hover:bg-gray-200 transition-transform hover:scale-105 inline-block">
                         Sign Up Free
                     </a>
                  </div>
@@ -552,3 +553,5 @@
     </script>
 </body>
 </html>
+
+

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign Up | Analiqo{% endblock %}
+
+{% block main %}
+<header class="sticky top-0 left-0 right-0 z-20 py-4" style="background-color: rgba(15,23,42,0.5); backdrop-filter: blur(12px); border-bottom: 1px solid #1f2937;">
+  <div class="container d-flex align-items-center justify-content-between" style="max-width: 1140px;">
+    <a href="{% url 'web:landing' %}" class="text-decoration-none"><span class="fs-4 fw-bold text-white">analiqo</span></a>
+    <nav class="d-none d-md-flex align-items-center">
+      <a href="{% url 'web:landing' %}#pricing" class="px-3 py-2 text-decoration-none" style="color:#cbd5e1;">Pricing</a>
+      <a href="{% url 'web:landing' %}#contact" class="px-3 py-2 text-decoration-none" style="color:#cbd5e1;">Contact</a>
+      <a href="{% url 'account_signup' %}" class="btn btn-light btn-sm ms-3">Sign Up</a>
+      <a href="{% url 'account_login' %}" class="btn btn-outline-light btn-sm ms-2">Sign In</a>
+    </nav>
+  </div>
+</header>
+<section class="py-5" style="background-color:#05071E;color:#E0E0E0;min-height:60vh;display:flex;align-items:center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        {% block content %}
+<style>
+  body { background-color: #05071E !important; color: #E0E0E0; }
+  .content-card { background: #0F172A; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important; }
+  .content-card .card-body { background: transparent; }
+  .form-label { color: #cbd5e1; }
+  .form-control { background-color: #1E293B; border-color: #334155; color: #E0E0E0; }
+  .form-control::placeholder { color: #94a3b8; }
+  .form-control:focus { border-color: #A78BFA; box-shadow: 0 0 0 0.2rem rgba(167,139,250,0.25); background-color: #1E293B; color: #E0E0E0; }
+  .btn-primary { background-color: #6D28D9; border-color: #6D28D9; }
+  .btn-primary:hover { background-color: #5b21b6; border-color: #5b21b6; }
+  a { color: #38BDF8; }
+  a:hover { color: #7dd3fc; }
+  .page-title { background: linear-gradient(90deg, #38BDF8, #A78BFA, #F472B6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; }
+  .muted { color: #94a3b8; }
+  main.container { max-width: 900px; }
+</style>
+    <h1 class="h3 mb-2 text-center page-title">Create your account</h1>
+    <p class="text-center muted mb-4">Start your free trial. No credit card required.</p>
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for error in form.non_field_errors %}
+        <div>{{ error }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'account_signup' %}" novalidate>
+      {% csrf_token %}
+
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="id_username" class="form-label">Username</label>
+          <input type="text" name="username" class="form-control" id="id_username" required>
+        </div>
+
+        <div class="col-md-6">
+          <label for="id_first_name" class="form-label">First name</label>
+          <input type="text" name="first_name" class="form-control" id="id_first_name" required>
+        </div>
+
+        <div class="col-md-6">
+          <label for="id_last_name" class="form-label">Last name</label>
+          <input type="text" name="last_name" class="form-control" id="id_last_name" required>
+        </div>
+
+        <div class="col-12">
+          <label for="id_email" class="form-label">Email address</label>
+          <input type="email" name="email" class="form-control" id="id_email" required>
+        </div>
+
+        <div class="col-12">
+          <label for="id_password1" class="form-label">Password</label>
+          <input type="password" name="password1" class="form-control" id="id_password1" required>
+        </div>
+
+        <div class="col-12">
+          <label for="id_password2" class="form-label">Confirm password</label>
+          <input type="password" name="password2" class="form-control" id="id_password2" required>
+        </div>
+
+        <div class="col-12 form-check mt-2">
+          <input class="form-check-input" type="checkbox" value="true" id="id_terms_accepted" name="terms_accepted" required>
+          <label class="form-check-label" for="id_terms_accepted">
+            I accept the Terms of Service and Privacy Policy
+          </label>
+        </div>
+      </div>
+
+      {% for field in form.hidden_fields %}
+        {{ field }}
+      {% endfor %}
+
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-primary btn-lg">Create account</button>
+      </div>
+    </form>
+
+    <p class="text-center mt-3 mb-0">
+      Already have an account?
+      <a href="{% url 'account_login' %}" class="btn btn-sm btn-outline-light ms-1">Sign In</a>
+    </p>
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+

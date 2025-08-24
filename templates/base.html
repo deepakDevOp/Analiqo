@@ -59,9 +59,12 @@
 </head>
 <body class="bg-light">
 
+    {% if request.user.is_authenticated %}
     {% include "components/navbar.html" %}
+    {% endif %}
 
     <!-- Main Content Block -->
+    {% block main %}
     <main class="container my-5">
         <div class="card content-card shadow-lg">
             <div class="card-body p-5">
@@ -73,6 +76,7 @@
             </div>
         </div>
     </main>
+    {% endblock %}
 
     {% include "components/footer.html" %}
 

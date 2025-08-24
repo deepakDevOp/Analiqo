@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Use the Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Main profile card -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div class="md:flex">
+                <!-- Left Column: Avatar and Basic Info -->
+                <div class="w-full md:w-1/3 p-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200 flex flex-col items-center text-center">
+                    <!-- Avatar -->
+                    <div class="mb-4">
+                        {% if user.avatar %}
+                            <img class="h-32 w-32 rounded-full object-cover ring-4 ring-blue-500 ring-offset-2" src="{{ user.avatar.url }}" alt="User Avatar">
+                        {% else %}
+                            <!-- Placeholder avatar -->
+                            <div class="h-32 w-32 rounded-full bg-gray-300 flex items-center justify-center text-white text-5xl font-bold ring-4 ring-gray-400 ring-offset-2">
+                                {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- User Name -->
+                    <h1 class="text-2xl font-bold text-gray-900">{{ user.full_name }}</h1>
+                    
+                    <!-- Username -->
+                    <p class="text-sm text-gray-500 mb-4">@{{ user.username }}</p>
+
+                    <!-- Contact Info -->
+                    <div class="space-y-2 text-left w-full max-w-xs mx-auto">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-envelope w-5 mr-3 text-gray-400"></i>
+                            <span>{{ user.email }}</span>
+                        </div>
+                        {% if user.phone %}
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-phone w-5 mr-3 text-gray-400"></i>
+                            <span>{{ user.phone }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Edit Profile Button -->
+                    <a href="{% url 'user:profile_edit' %}" class="mt-6 w-full max-w-xs bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">
+                        Edit Profile
+                    </a>
+                </div>
+
+                <!-- Right Column: Detailed Information -->
+                <div class="w-full md:w-2/3 p-8">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6 border-b pb-4">Account Details</h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+                        <!-- Account Status -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Account Status</h3>
+                            {% if user.is_active %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1.5"></i> Active
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    <i class="fas fa-times-circle mr-1.5"></i> Inactive
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Email Verification -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Email Verification</h3>
+                            {% if user.email_verified %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-shield-alt mr-1.5"></i> Verified
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <i class="fas fa-exclamation-triangle mr-1.5"></i> Not Verified
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Timezone -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Timezone</h3>
+                            <p class="text-gray-700">{{ user.timezone }}</p>
+                        </div>
+
+                        <!-- Date Joined -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Date Joined</h3>
+                            <p class="text-gray-700">{{ user.date_joined|date:"F d, Y" }}</p>
+                        </div>
+                        
+                        <!-- Last Login -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Last Login</h3>
+                            <p class="text-gray-700">{{ user.last_login|timesince }} ago</p>
+                        </div>
+
+                        <!-- Last Login IP -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Last Login IP</h3>
+                            <p class="text-gray-700">{{ user.last_login_ip|default:"N/A" }}</p>
+                        </div>
+
+                        <!-- Terms Acceptance -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Terms Accepted</h3>
+                            <p class="text-gray-700">{{ user.terms_accepted_at|date:"F d, Y H:i"|default:"Not accepted" }}</p>
+                        </div>
+
+                        <!-- Privacy Acceptance -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Privacy Accepted</h3>
+                            <p class="text-gray-700">{{ user.privacy_accepted_at|date:"F d, Y H:i"|default:"Not accepted" }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Section -->
+                    <div class="mt-8 pt-6 border-t">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Preferences</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            <!-- UI Preferences -->
+                            <div>
+                                <h3 class="text-md font-semibold text-gray-600 mb-2">UI Preferences</h3>
+                                <div class="bg-gray-100 p-4 rounded-lg text-sm">
+                                    {% if user.ui_preferences %}
+                                        <ul class="list-disc list-inside space-y-1">
+                                            {% for key, value in user.ui_preferences.items %}
+                                                <li><strong>{{ key|title }}:</strong> {{ value|yesno:"Enabled,Disabled" }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="text-gray-500">No UI preferences set.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                             <!-- Notification Preferences -->
+                            <div>
+                                <h3 class="text-md font-semibold text-gray-600 mb-2">Notifications</h3>
+                                <div class="bg-gray-100 p-4 rounded-lg text-sm">
+                                    {% if user.notification_preferences %}
+                                        <ul class="list-disc list-inside space-y-1">
+                                            {% for key, value in user.notification_preferences.items %}
+                                                <li><strong>{{ key|title }}:</strong> {{ value|yesno:"Enabled,Disabled" }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="text-gray-500">No notification preferences set.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
