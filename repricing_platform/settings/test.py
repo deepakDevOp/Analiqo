@@ -7,13 +7,9 @@ from .base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Use in-memory SQLite for faster tests
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
-    }
-}
+# Use PostgreSQL for tests (same as base configuration)
+# Uses the same PostgreSQL configuration from base.py
+# Make sure to set DB_NAME, DB_USER, DB_PASSWORD environment variables
 
 # Disable migrations for faster tests
 class DisableMigrations:

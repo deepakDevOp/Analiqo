@@ -7,6 +7,10 @@ import os
 from pathlib import Path
 
 from urllib.parse import urlparse
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -66,10 +70,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "core.context_processors.menus",
-                # Removed organization context processor for minimal setup
-                # "billing.context_processors.subscription", 
-                # "notifications.context_processors.alerts",
+                "core.context_processors.menus"
             ],
         },
     },
@@ -77,27 +78,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "repricing_platform.wsgi.application"
 
-# Database
-DATABASE_URL = get_env("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
-if DATABASE_URL.startswith("sqlite:"):
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": DATABASE_URL.replace("sqlite:///", ""),
-        }
+# Database - PostgreSQL only
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": get_env("DB_NAME"),
+        "USER": get_env("DB_USER"),
+        "PASSWORD": get_env("DB_PASSWORD"),
+        "HOST": get_env("DB_HOST"),
+        "PORT": get_env("DB_PORT"),
     }
-else:
-    parsed = urlparse(DATABASE_URL)
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": parsed.path.lstrip("/"),
-            "USER": parsed.username,
-            "PASSWORD": parsed.password,
-            "HOST": parsed.hostname,
-            "PORT": parsed.port or "5432",
-        }
-    }
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

@@ -9,13 +9,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "*"]
 
-# Database for development - using SQLite for simplicity
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# Database for development - using PostgreSQL
+# Uses the same PostgreSQL configuration from base.py
+# Make sure to set DB_NAME, DB_USER, DB_PASSWORD environment variables
 
 # Email backend for development
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
